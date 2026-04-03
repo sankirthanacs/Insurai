@@ -7498,8 +7498,12 @@
                     return;
                 }
 
-                // Get WebSocket URL from environment or use default
-                const wsUrl = window.WEBSOCKET_URL || 'ws://localhost:8080/ws/dashboard';
+                // Get WebSocket URL - production-safe logic
+                const wsUrl = window.WEBSOCKET_URL || (
+                    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'ws://localhost:8080/ws/dashboard'
+                        : 'wss://insurai.railway.app/ws/dashboard'
+                );
                 console.log('[Underwriter] Connecting to WebSocket:', wsUrl);
                 
                 // Create WebSocket connection
