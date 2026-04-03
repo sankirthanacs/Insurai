@@ -4,8 +4,9 @@
 // ============================================
 // Configuration & Constants
 // ============================================
-const API_BASE_URL = 'http://localhost:8080/api';
-const WS_URL = 'ws://localhost:8080/ws/dashboard';
+window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+const API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
+const WS_URL = window.WS_URL || window.__WS_URL__ || `wss://${new URL(window.API_HOST).host}/ws/dashboard`;
 
 async function authFetch(url, options = {}) {
     const token = localStorage.getItem('token') || localStorage.getItem('authToken');

@@ -1,9 +1,8 @@
 ﻿// Real-time and utility helpers for InsurAI customer portal
 
-// API_BASE_URL is defined in api.js or globally
-if (typeof API_BASE_URL === 'undefined') {
-    window.API_BASE_URL = 'http://localhost:8080/api';
-}
+// Set API base from global environment override or production fallback.
+window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
 function getToken() {
     return localStorage.getItem('authToken');

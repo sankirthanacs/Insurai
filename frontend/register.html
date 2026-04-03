@@ -281,7 +281,8 @@ Already have an account? <a onclick="goBack()">Sign in</a>
 </div>
 
 <script>
-window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8080/api';
+window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
 function goBack(){
 window.location.href = 'index.html';
@@ -385,7 +386,7 @@ if(response.ok){
 }
 }catch(error){
 console.error("Registration error:", error);
-alert("Connection error. Make sure backend is running on port 8080");
+alert("Connection error. Check VITE_API_URL / backend URL (https://insurai.railway.app)");
 }
 }
 </script>

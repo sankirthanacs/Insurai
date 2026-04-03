@@ -504,7 +504,8 @@
         function loginWithGoogle() {
             console.log('loginWithGoogle() called!');
             // Redirect to backend's Google OAuth endpoint
-            const googleAuthUrl = `http://localhost:8080/oauth2/authorization/google`;
+            const API = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
+            const googleAuthUrl = `${API}/oauth2/authorization/google`;
             console.log('Redirecting to:', googleAuthUrl);
             window.location.href = googleAuthUrl;
         }

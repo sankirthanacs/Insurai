@@ -17,8 +17,11 @@ const dashboardState = {
 };
 
 // API Configuration
+window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
+
 const API_CONFIG = {
-  baseUrl: 'http://localhost:8080/api',
+  baseUrl: `${API}/api`,
   endpoints: {
     // User endpoints
     userProfile: '/user/profile',

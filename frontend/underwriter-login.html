@@ -218,7 +218,8 @@
     </div>
 
     <script>
-        window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8080/api';
+        window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+        window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
         function showAlert(message, type) {
             const alert = document.getElementById('alert');

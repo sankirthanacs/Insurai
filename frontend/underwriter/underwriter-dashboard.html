@@ -3242,7 +3242,9 @@
 
     <script>
         // Configuration
-        const API_BASE = 'http://localhost:8080';
+        window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+        const API_BASE = window.API_HOST;
+        window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
         // Navigation
         function openPage(page) {

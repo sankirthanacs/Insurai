@@ -9,7 +9,9 @@ function initDashboardSync() {
         eventSource.close();
     }
 
-    eventSource = new EventSource('http://localhost:8080/dashboard-updates');
+    const API = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
+    const sseUrl = `${API}/dashboard-updates`;
+    eventSource = new EventSource(sseUrl);
 
     console.log('🔄 Connecting to real-time updates...');
 
