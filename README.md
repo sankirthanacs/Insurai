@@ -36,11 +36,13 @@ The frontend is a static web app located in /frontend.
 
 Open frontend/index.html for main page
 Dashboards available for User, Admin, Claim Adjuster, and HR
+
 🔐 Production Notes
 Use HTTPS
 Store secrets using environment variables
 Enable Spring Security
 Configure monitoring and logging
+
 📝 Author
 Sankeerthana
 GitHub: https://github.com/sankirthanacs
