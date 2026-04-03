@@ -1,7 +1,8 @@
 // api.js
 
-// ✅ Single source of truth (fallback and global ensures no redeclaration)
-window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+// 🧩 Production base URL constant (Railway backend) and optional override
+const BASE_URL = 'https://insurai.railway.app';
+window.API_HOST = window.__API_URL__ || BASE_URL;
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
 // Helper to avoid const re-declaration when script loads twice
@@ -11,19 +12,8 @@ function getApiBaseUrl() {
 
 // Enhanced API configuration with multiple fallback options
 function getApiConfig() {
-    const defaultApi = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
-    const configs = [
-        `${defaultApi}/api`,
-        'http://127.0.0.1:8080/api'
-    ];
-    
-    // Try to detect if we're running in a different environment
-    const currentHost = window.location.hostname;
-    if (currentHost !== 'localhost' && currentHost !== '127.0.0.1') {
-        // If not localhost, try to use the same host but different port
-        configs.unshift(`http://${currentHost}:8080/api`);
-    }
-    
+    const defaultApi = window.API_HOST || window.__API_URL__ || BASE_URL;
+    const configs = [`${defaultApi}/api`];
     return configs;
 }
 
