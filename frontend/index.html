@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="InsurAI - Next Generation AI Insurance Fraud Detection Platform">
+
+<title>InsurAI - AI Insurance Fraud Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+/* GLOBAL */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter', sans-serif;
+scroll-behavior:smooth;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:linear-gradient(-45deg,#020617,#0f172a,#1e3a8a,#312e81);
+background-size:400% 400%;
+animation:bgMove 20s infinite alternate;
+color:white;
+transition:background 0.6s ease, color 0.6s ease;
+overflow-x:hidden;
+}
+
+/* Smooth theme transitions for cards, panels, headers */
+.card,
+.price-card,
+.about-box,
+.contact-box,
+.testimonial,
+nav,
+footer {
+  transition: background 0.6s ease, box-shadow 0.6s ease, border 0.6s ease, color 0.6s ease;
+}
+
+body.light{
+  background: radial-gradient(circle at top left, rgba(59,130,246,0.22), transparent 52%),
+              radial-gradient(circle at bottom right, rgba(99,102,241,0.16), transparent 62%),
+              linear-gradient(135deg, #dbeafe 0%, #e0f2fe 35%, #eff6ff 75%, #f0f9ff 100%);
+  background-attachment: fixed;
+  color: #0f172a;
+}
+
+body.light::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(99,102,241,0.10), transparent 60%);
+  pointer-events: none;
+}
+
+body.light input,
+body.light textarea,
+body.light select{
+color:#1a1a1a;
+background:rgba(255,255,255,0.7);
+}
+
+body.light a{
+color:#3b82f6;
+}
+
+/* Light mode overrides for consistent readability */
+body.light a,
+body.light a:visited {
+  color: #1d4ed8;
+}
+
+body.light .nav-links a {
+  color: #1d4ed8;
+}
+
+body.light .nav-links a:hover {
+  color: #1d4ed8;
+}
+
+body.light .hero h1,
+body.light section h2,
+body.light .logo,
+body.light .price-card h1,
+body.light .card h2 {
+  color: #0f172a;
+}
+
+body.light input::placeholder,
+body.light textarea::placeholder {
+  color: rgba(26, 26, 26, 0.5) !important;
+}
+
+body.light .hero h1,
+body.light section h2,
+body.light .logo,
+body.light .price-card h1,
+body.light .card h2 {
+  background: none;
+  -webkit-text-fill-color: unset;
+  color: #0f172a;
+}
+
+body.light .feature {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.28), rgba(147, 197, 253, 0.18));
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #0f172a;
+  box-shadow: 0 18px 40px rgba(59, 130, 246, 0.15);
+}
+
+body.light .stat-box,
+body.light .price-card,
+body.light .testimonial,
+body.light .card,
+body.light .about-box,
+body.light .contact-box {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(249, 250, 252, 0.82));
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+body.light .stat-box h3 {
+  color: #1d4ed8;
+}
+
+body.light .card {
+  background: linear-gradient(135deg, rgba(236, 248, 255, 0.92), rgba(249, 250, 252, 0.78));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow: 0 22px 60px rgba(59, 130, 246, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+body.light .card h2 {
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+
+body.light .card input,
+body.light .card select,
+body.light .card textarea {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  color: #0f172a;
+}
+
+body.light .card p,
+body.light .card label,
+body.light .remember-row label,
+body.light .remember-row p {
+  color: rgba(15, 23, 42, 0.92);
+}
+
+body.light .price-card p,
+body.light .testimonial p,
+body.light .footer-grid a,
+body.light .footer-grid div p,
+body.light .copyright {
+  color: rgba(15, 23, 42, 0.95);
+}
+
+body.light .footer-grid div h4 {
+  color: rgba(15, 23, 42, 0.95);
+}
+
+body.light .footer-grid a:hover {
+  color: rgba(37, 99, 235, 1);
+}
+
+body.light .about-box {
+  background: linear-gradient(135deg, rgba(236, 248, 255, 0.95), rgba(249, 250, 252, 0.82));
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  box-shadow: 0 20px 55px rgba(59, 130, 246, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+body.light .about-box p {
+  color: #0f172a;
+}
+
+body.light .price-card {
+  background: rgba(236, 242, 255, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.24);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.14);
+  backdrop-filter: blur(18px);
+  border-left: 6px solid rgba(59, 130, 246, 0.85);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.light .price-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.14);
+}
+
+body.light .price-card h3 {
+  color: #1d4ed8;
+}
+
+body.light .price-card p,
+body.light .price-card span,
+body.light .price-card h1 span {
+  color: rgba(15, 23, 42, 0.9) !important;
+}
+
+body.light footer {
+  background: rgba(236, 248, 255, 0.92);
+  border-top: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow: 0 -8px 35px rgba(59, 130, 246, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+body.light .footer-grid div h4 {
+  color: rgba(15, 23, 42, 0.95);
+}
+
+body.light .footer-grid div p,
+body.light .footer-grid a,
+body.light .copyright {
+  color: rgba(15, 23, 42, 0.9);
+}
+
+body.light .footer-grid a:hover {
+  color: rgba(37, 99, 235, 1);
+}
+
+/* NAVBAR */
+
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 80px;
+  position:sticky;
+  top:0;
+  backdrop-filter:blur(20px);
+  background:rgba(0,0,0,0.1);
+  z-index:1000;
+  box-shadow:0 8px 32px rgba(0,0,0,0.1);
+  transition:all 0.3s ease;
+}
+
+body.light nav{
+  background:rgba(255,255,255,0.3);
+  box-shadow:0 18px 50px rgba(15, 23, 42, 0.08);
+  border-bottom:1px solid rgba(148, 163, 184, 0.35);
+}
+
+body.light .hero {
+  background: rgba(236, 248, 255, 0.9);
+  border-radius: 36px;
+  box-shadow: 0 30px 70px rgba(59, 130, 246, 0.12);
+  padding: 80px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+body.light .hero .feature {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+body.light section {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(249, 250, 252, 0.64));
+  border-radius: 32px;
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+/* Soft float animation for glass panels */
+@keyframes floatUp {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+body.light .card,
+body.light .price-card,
+body.light .about-box,
+body.light .contact-box,
+body.light .testimonial {
+  animation: floatUp 12s ease-in-out infinite;
+}
+
+body.light .card:hover,
+body.light .price-card:hover,
+body.light .about-box:hover,
+body.light .contact-box:hover,
+body.light .testimonial:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.12);
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+transition:transform 0.3s ease;
+cursor:default;
+}
+
+.logo:hover{
+transform:scale(1.05);
+}
+
+.nav-links{
+display:flex;
+gap:35px;
+align-items:center;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+font-size:14px;
+font-weight:500;
+cursor:pointer;
+position:relative;
+transition:color 0.3s ease;
+}
+
+.nav-links a::before{
+content:'';
+position:absolute;
+bottom:-5px;
+left:0;
+width:0;
+height:2px;
+background:linear-gradient(90deg,#3b82f6,#8b5cf6);
+transition:width 0.3s ease;
+}
+
+.nav-links a:hover{
+color:#3b82f6;
+}
+
+.nav-links a:hover::before{
+width:100%;
+}
+
+body.light .nav-links a{
+color:#1a1a1a;
+}
+
+body.light .nav-links a:hover{
+color:#3b82f6;
+}
+
+/* DROPDOWN MENU */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 16px;
+    color: #1a1a1a !important;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6 !important;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+body.light .dropdown-menu {
+    background: rgba(255, 255, 255, 0.98);
+}
+
+/* HERO */
+
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:80px;
+gap:60px;
+min-height:90vh;
+animation:fadeInUp 0.8s ease-out;
+}
+
+.hero h1{
+font-size:56px;
+font-weight:800;
+line-height:1.2;
+margin-bottom:30px;
+background:linear-gradient(135deg,#fff,#a3d5ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+animation:slideInLeft 0.8s ease-out;
+}
+
+body.light .hero h1 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  color: #0f172a !important;
+}
+
+/* FEATURE BOX */
+
+.feature{
+background:rgba(255,255,255,0.08);
+padding:16px;
+border-radius:12px;
+margin-bottom:12px;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+transition:all 0.3s ease;
+font-weight:500;
+animation:slideInLeft 0.8s ease-out backwards;
+}
+
+.feature:nth-child(2){
+animation-delay:0.1s;
+}
+
+.feature:nth-child(3){
+animation-delay:0.2s;
+}
+
+.feature:nth-child(4){
+animation-delay:0.3s;
+}
+
+.feature:hover{
+background:rgba(255,255,255,0.12);
+border-color:rgba(59,130,246,0.5);
+transform:translateX(10px);
+box-shadow:0 8px 24px rgba(59,130,246,0.2);
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:30px;
+}
+
+.stat-box{
+background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.05));
+padding:20px;
+border-radius:16px;
+text-align:center;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+transition:all 0.3s ease;
+animation:scaleIn 0.6s ease-out backwards;
+}
+
+.stat-box:nth-child(1){
+animation-delay:0.4s;
+}
+
+.stat-box:nth-child(2){
+animation-delay:0.5s;
+}
+
+.stat-box:nth-child(3){
+animation-delay:0.6s;
+}
+
+.stat-box:nth-child(4){
+animation-delay:0.7s;
+}
+
+.stat-box h3{
+font-size:32px;
+font-weight:800;
+color:#3b82f6;
+margin-bottom:5px;
+}
+
+.stat-box p{
+font-size:13px;
+color:#cbd5f5;
+font-weight:500;
+}
+
+.stat-box:hover{
+transform:translateY(-5px);
+background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.08));
+box-shadow:0 12px 40px rgba(59,130,246,0.25);
+}
+
+/* LOGIN CARD */
+
+.card{
+width:380px;
+padding:40px;
+border-radius:24px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.2);
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+transition:all 0.3s ease;
+animation:slideInRight 0.8s ease-out;
+}
+
+.card:hover{
+box-shadow:0 25px 80px rgba(59,130,246,0.3);
+border-color:rgba(59,130,246,0.3);
+transform:translateY(-5px);
+}
+
+.card h2{
+font-size:28px;
+font-weight:700;
+margin-bottom:25px;
+}
+
+input,textarea,select{
+width:100%;
+padding:13px 16px;
+margin-top:14px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.2);
+outline:none;
+background:rgba(255,255,255,0.1);
+color:white;
+font-size:14px;
+transition:all 0.3s ease;
+backdrop-filter:blur(10px);
+}
+
+input::placeholder,
+textarea::placeholder{
+color:rgba(255,255,255,0.5);
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+background:rgba(255,255,255,0.15);
+border-color:rgba(59,130,246,0.5);
+box-shadow:0 0 20px rgba(59,130,246,0.2);
+}
+
+textarea{
+resize:vertical;
+font-family:inherit;
+}
+
+select{
+cursor:pointer;
+}
+
+select option{
+background:#1e293b;
+color:white;
+}
+
+/* REMEMBER FIX */
+
+.remember-row{
+display:flex;
+align-items:center;
+gap:12px;
+margin-top:16px;
+font-size:13px;
+}
+
+.remember-row input[type="checkbox"]{
+width:18px;
+height:18px;
+padding:0;
+margin:0;
+margin-top:0;
+cursor:pointer;
+}
+
+.remember-row label{
+margin:0;
+padding:0;
+cursor:pointer;
+font-size:14px;
+color:#cbd5f5;
+transition:color 0.3s ease;
+}
+
+.remember-row label:hover{
+color:#3b82f6;
+}
+
+/* BUTTON */
+
+.btn{
+width:100%;
+padding:13px 16px;
+margin-top:16px;
+border-radius:12px;
+border:none;
+background:linear-gradient(90deg,#3b82f6,#6366f1);
+color:white;
+cursor:pointer;
+font-weight:600;
+font-size:14px;
+transition:all 0.3s ease;
+position:relative;
+overflow:hidden;
+}
+
+.btn::before{
+content:'';
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+transition:left 0.5s ease;
+}
+
+.btn:hover::before{
+left:100%;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(59,130,246,0.4);
+}
+
+.btn:active{
+transform:translateY(0);
+}
+
+body.light .btn{
+  background: linear-gradient(90deg, #2563eb, #6366f1);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(59, 130, 246, 0.25);
+}
+
+/* Light mode overrides to keep text readable on light backgrounds */
+body.light .stat-box p,
+body.light .price-card h3,
+body.light .price-card p,
+body.light .testimonial p,
+body.light .remember-row p,
+body.light .footer-grid a {
+  color:#1a1a1a;
+}
+
+body.light .stat-box h3 {
+  color:#2563eb;
+}
+
+body.light .price-card {
+  background:rgba(255,255,255,0.65);
+  border-color:rgba(148,163,184,0.5);
+}
+
+body.light .testimonial,
+body.light .about-box,
+body.light .contact-box,
+body.light .card {
+  background:rgba(255,255,255,0.75);
+  border-color:rgba(148,163,184,0.4);
+}
+
+.remember-row p{
+text-align:center;
+margin-top:16px;
+font-size:13px;
+color:#cbd5f5;
+}
+
+.remember-row p a{
+color:#3b82f6;
+text-decoration:none;
+transition:color 0.3s ease;
+}
+
+.remember-row p a:hover{
+color:#60a5fa;
+}
+
+/* SECTIONS */
+
+section{
+padding:80px;
+animation:fadeInUp 0.8s ease-out forwards;
+}
+
+section h2{
+font-size:42px;
+font-weight:800;
+text-align:center;
+background:linear-gradient(135deg,#fff,#a3d5ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+margin-bottom:50px;
+}
+
+body.light section h2 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  color: #0f172a !important;
+}
+
+/* ABOUT */
+
+.about-box{
+max-width:900px;
+margin:auto;
+background:rgba(255,255,255,0.08);
+padding:50px;
+border-radius:24px;
+line-height:1.8;
+text-align:center;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+transition:all 0.3s ease;
+}
+
+.about-box:hover{
+background:rgba(255,255,255,0.12);
+border-color:rgba(59,130,246,0.3);
+box-shadow:0 15px 50px rgba(59,130,246,0.2);
+}
+
+.about-box p{
+font-size:16px;
+color:#cbd5f5;
+line-height:1.9;
+}
+
+/* PRICING */
+
+.pricing-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+margin-top:40px;
+}
+
+.price-card{
+background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
+padding:40px;
+border-radius:24px;
+text-align:center;
+transition:all 0.3s ease;
+border:1px solid rgba(255,255,255,0.1);
+position:relative;
+overflow:hidden;
+}
+
+.price-card::before{
+content:'';
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);
+transition:all 0.8s ease;
+}
+
+.price-card:hover::before{
+top:-50%;
+left:-50%;
+animation:shine 0.8s ease;
+}
+
+.price-card h3{
+font-size:20px;
+font-weight:600;
+color:#cbd5f5;
+margin-bottom:15px;
+}
+
+.price-card h1{
+font-size:48px;
+font-weight:800;
+background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+margin:15px 0;
+}
+
+.price-card:hover{
+transform:translateY(-15px);
+box-shadow:0 20px 60px rgba(59,130,246,0.3);
+border-color:rgba(59,130,246,0.4);
+background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.05));
+}
+
+.price-card.featured{
+border:2px solid rgba(59,130,246,0.6);
+transform:scale(1.05);
+}
+
+/* TESTIMONIAL */
+
+.testimonial-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+margin-top:40px;
+}
+
+.testimonial{
+background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
+padding:30px;
+border-radius:18px;
+line-height:1.8;
+border:1px solid rgba(255,255,255,0.1);
+border-left:4px solid rgba(59,130,246,0.5);
+transition:all 0.3s ease;
+backdrop-filter:blur(10px);
+}
+
+.testimonial:hover{
+background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.05));
+box-shadow:0 12px 40px rgba(59,130,246,0.2);
+transform:translateX(10px);
+}
+
+/* LINKS STYLING */
+
+a{
+text-decoration:none;
+}
+
+.forgot-password{
+display:block;
+text-align:right;
+margin-top:12px;
+font-size:13px;
+color:#3b82f6;
+transition:color 0.3s ease;
+cursor:pointer;
+}
+
+.forgot-password:hover{
+color:#60a5fa;
+}
+
+.register-link{
+text-align:center;
+margin-top:16px;
+font-size:13px;
+color:#cbd5f5;
+}
+
+.register-link a{
+color:#3b82f6;
+transition:color 0.3s ease;
+}
+
+.register-link a:hover{
+color:#60a5fa;
+}
+
+/* CHAT FLOAT BUTTON */
+.chat-float {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.chat-float:hover {
+  transform: translateY(-3px) scale(1.05);
+  opacity: 0.92;
+}
+
+.chat-float a {
+  color: #fff;
+  font-size: 22px;
+  text-decoration: none;
+}
+
+/* CONTACT */
+
+.contact-box{
+max-width:500px;
+margin:auto;
+background:rgba(255,255,255,0.08);
+padding:45px;
+border-radius:24px;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+transition:all 0.3s ease;
+}
+
+.contact-box:hover{
+background:rgba(255,255,255,0.12);
+border-color:rgba(59,130,246,0.3);
+box-shadow:0 15px 50px rgba(59,130,246,0.2);
+}
+
+/* FOOTER */
+
+footer{
+padding:60px 80px;
+background:linear-gradient(135deg,rgba(0,0,0,0.3),rgba(0,0,0,0.2));
+margin-top:100px;
+border-top:1px solid rgba(255,255,255,0.1);
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:40px;
+}
+
+.footer-grid div h4{
+font-size:16px;
+font-weight:600;
+margin-bottom:15px;
+color:#fff;
+}
+
+.footer-grid div p{
+font-size:13px;
+color:#cbd5f5;
+line-height:1.6;
+}
+
+.footer-grid a{
+display:block;
+color:#cbd5f5;
+text-decoration:none;
+margin-top:10px;
+font-size:13px;
+transition:all 0.3s ease;
+}
+
+.footer-grid a:hover{
+color:#3b82f6;
+transform:translateX(5px);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+text-align:center;
+margin-top:50px;
+padding-top:30px;
+border-top:1px solid rgba(255,255,255,0.1);
+color:#8398c7;
+font-size:13px;
+}
+
+/* ANIMATION */
+
+@keyframes bgMove{
+0%{background-position:left;}
+100%{background-position:right;}
+}
+
+@keyframes fadeInUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes slideInLeft{
+from{
+opacity:0;
+transform:translateX(-40px);
+}
+to{
+opacity:1;
+transform:translateX(0);
+}
+}
+
+@keyframes slideInRight{
+from{
+opacity:0;
+transform:translateX(40px);
+}
+to{
+opacity:1;
+transform:translateX(0);
+}
+}
+
+@keyframes scaleIn{
+from{
+opacity:0;
+transform:scale(0.9);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+@keyframes shine{
+0%{
+transform:translateX(-100%) translateY(-100%);
+}
+100%{
+transform:translateX(100%) translateY(100%);
+}
+}
+
+/* RESPONSIVENESS */
+
+@media(max-width:1024px){
+.hero{
+padding:60px 40px;
+gap:40px;
+flex-direction:column;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.card{
+width:100%;
+max-width:400px;
+}
+
+.pricing-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+nav{
+padding:16px 40px;
+}
+
+section{
+padding:60px 40px;
+}
+
+footer{
+padding:40px;
+}
+
+.footer-grid{
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+}
+
+@media(max-width:768px){
+nav{
+padding:12px 20px;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.logo{
+font-size:22px;
+}
+
+.nav-links{
+gap:15px;
+font-size:12px;
+}
+
+.hero{
+padding:40px 20px;
+gap:30px;
+min-height:auto;
+}
+
+.hero h1{
+font-size:32px;
+}
+
+.card{
+width:100%;
+padding:30px 20px;
+}
+
+.stats{
+gap:10px;
+}
+
+.stat-box{
+padding:15px;
+}
+
+.pricing-grid{
+grid-template-columns:1fr;
+}
+
+.price-card.featured{
+transform:scale(1);
+}
+
+.testimonial-grid{
+grid-template-columns:1fr;
+}
+
+section{
+padding:40px 20px;
+}
+
+section h2{
+font-size:28px;
+}
+
+.about-box{
+padding:30px 20px;
+}
+
+.contact-box{
+padding:30px 20px;
+}
+
+footer{
+padding:30px 20px;
+}
+
+.footer-grid{
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.copyright{
+margin-top:30px;
+padding-top:20px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+<div class="logo">🛡️ InsurAI</div>
+
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#pricing">Policies</a>
+<a href="#testimonial">Testimonials</a>
+<a href="#contact">Contact</a>
+<a href="user/user-dashboard.html#assistant" class="chat-link" title="Go to AI Chat">🤖 AI Chat</a>
+<div class="dropdown">
+    <a href="#" class="dropdown-toggle">Login <i class="fas fa-chevron-down"></i></a>
+    <div class="dropdown-menu">
+        <a href="login.html">Customer Login</a>
+        <a href="underwriter-login.html">Underwriter Login</a>
+    </div>
+</div>
+<a onclick="toggleTheme()" title="Toggle dark/light mode">🌙</a>
+</div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+
+<div>
+<h1>Next Generation AI<br>Insurance Fraud Detection</h1>
+
+<div class="feature">⚡ AI-Powered Fraud Detection</div>
+<div class="feature">🧠 Advanced Analytics Engine</div>
+<div class="feature">🔍 Real-Time Risk Scoring</div>
+<div class="feature">⚙️ Instant Claim Processing</div>
+
+<div class="stats">
+<div class="stat-box"><h3>97%</h3><p>Accuracy Rate</p></div>
+<div class="stat-box"><h3>10K+</h3><p>Claims Verified</p></div>
+<div class="stat-box"><h3>24/7</h3><p>Active Monitoring</p></div>
+<div class="stat-box"><h3>5-7 Days</h3><p>Avg. Processing</p></div>
+</div>
+</div>
+
+<!-- LOGIN CARD -->
+<div class="card">
+<h2>Welcome Back</h2>
+
+<button class="btn" style="background:white;color:black;margin-top:0;" onclick="loginWithGoogle()">
+<i class="fab fa-google"></i> Continue with Google
+</button>
+
+<input type="email" id="loginEmail" placeholder="Email address" required>
+<input type="password" id="loginPassword" placeholder="Password" required>
+
+<select id="userRole" required>
+<option value="">Select Role</option>
+<option value="CUSTOMER">👤 Customer</option>
+<option value="UNDERWRITER">🔍 Claim Adjuster</option>
+<option value="HR">👤 HR</option>
+<option value="ADMIN">👨‍💻 Administrator</option>
+</select>
+
+<div class="remember-row">
+<input type="checkbox" id="remember">
+<label for="remember">Remember me</label>
+</div>
+
+<a class="forgot-password" onclick="showForgotPassword(); return false;">Forgot password?</a>
+
+<button class="btn" type="button" onclick="handleLogin(); return false;">Sign In</button>
+
+<p class="register-link">
+Don't have an account? <a onclick="showRegister(); return false;">Register here</a>
+</p>
+
+</div>
+
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about">
+<h2>About InsurAI</h2>
+
+<div class="about-box">
+<p>
+InsurAI is a cutting-edge AI-powered insurance fraud detection platform designed to revolutionize the insurance industry. 
+Using advanced machine learning algorithms and real-time data analytics, we help insurance companies automate claim verification, 
+predict potential fraud schemes, and detect anomalies with unprecedented accuracy. Our platform processes thousands of claims daily, 
+identifying suspicious patterns and protecting your business from substantial losses.
+</p>
+</div>
+</section>
+
+<!-- POLICIES SECTION -->
+<section id="pricing">
+<h2>Insurance Policies</h2>
+
+<div class="pricing-grid">
+
+<div class="price-card">
+<h3>💼 Basic</h3>
+<h1>₹250<span style="font-size:16px;color:#cbd5f5;font-weight:400;">/month</span></h1>
+<p style="color:#cbd5f5;margin:15px 0;font-size:13px;">Perfect for small businesses</p>
+<button class="btn">Choose Plan</button>
+</div>
+
+<div class="price-card featured">
+<h3>⭐ Professional</h3>
+<h1>₹500<span style="font-size:16px;color:#cbd5f5;font-weight:400;">/month</span></h1>
+<p style="color:#cbd5f5;margin:15px 0;font-size:13px;">Most popular choice</p>
+<button class="btn">Choose Plan</button>
+</div>
+
+<div class="price-card">
+<h3>🚀 Enterprise</h3>
+<h1>₹999<span style="font-size:16px;color:#cbd5f5;font-weight:400;">/month</span></h1>
+<p style="color:#cbd5f5;margin:15px 0;font-size:13px;">For large enterprises</p>
+<button class="btn">Choose Plan</button>
+</div>
+
+</div>
+</section>
+
+<!-- TESTIMONIALS SECTION -->
+<section id="testimonial">
+
+<h2>What Our Clients Say</h2>
+
+<div class="testimonial-grid">
+
+<div class="testimonial">
+<p>⭐⭐⭐⭐⭐</p>
+<p style="margin-top:12px;">"InsurAI has significantly reduced our fraud cases. The detection accuracy is remarkable and the platform is incredibly easy to use. Highly recommended!"</p>
+<p style="margin-top:15px;font-weight:600;font-size:13px;">- Sarah Johnson, Claims Manager</p>
+</div>
+
+<div class="testimonial">
+<p>⭐⭐⭐⭐⭐</p>
+<p style="margin-top:12px;">"The real-time monitoring and automated alerts have saved us thousands. InsurAI is a game-changer for our insurance business."</p>
+<p style="margin-top:15px;font-weight:600;font-size:13px;">- Michael Chen, Operations Director</p>
+</div>
+
+<div class="testimonial">
+<p>⭐⭐⭐⭐⭐</p>
+<p style="margin-top:12px;">"Fast implementation, excellent support team, and the ROI was immediate. This is the best fraud detection solution we've used."</p>
+<p style="margin-top:15px;font-weight:600;font-size:13px;">- Emily Davis, Risk Analyst</p>
+</div>
+
+<div class="testimonial">
+<p>⭐⭐⭐⭐⭐</p>
+<p style="margin-top:12px;">"The analytics dashboard provides insights we never had before. InsurAI has transformed how we handle claim verification."</p>
+<p style="margin-top:15px;font-weight:600;font-size:13px;">- Robert Martinez, CEO</p>
+</div>
+
+</div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact">
+
+<h2>Contact Us</h2>
+
+<div class="contact-box">
+
+<input type="text" placeholder="Your full name" required>
+<input type="email" placeholder="Your email address" required>
+<textarea placeholder="Tell us about your needs..." rows="6" required></textarea>
+
+<button class="btn" type="button" onclick="sendContactMessage(); return false;">Send Message</button>
+
+<p style="text-align:center;margin-top:16px;font-size:12px;color:#8398c7;">
+We'll get back to you within 24 hours.
+</p>
+
+</div>
+
+</section>
+
+<!-- AI CHAT FLOAT -->
+<div class="chat-float">
+  <a href="user/user-dashboard.html#assistant" title="Open AI Chat"><i class="fas fa-robot"></i></a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+
+<div class="footer-grid">
+
+<div>
+<h4>🛡️ InsurAI</h4>
+<p>
+Advanced AI-powered insurance fraud detection platform protecting businesses worldwide.
+</p>
+</div>
+
+<div>
+<h4>Product</h4>
+<a href="#pricing">Features</a>
+<a href="#pricing">Policies</a>
+<a href="#about">How It Works</a>
+</div>
+
+<div>
+<h4>Company</h4>
+<a href="#about">About Us</a>
+<a href="#contact">Contact</a>
+<a href="#">Blog</a>
+</div>
+
+<div>
+<h4>Support</h4>
+<a href="#">Documentation</a>
+<a href="#">FAQ</a>
+<a href="#">Community</a>
+</div>
+
+<div>
+<h4>Connect</h4>
+<a href="https://twitter.com" target="_blank">Twitter</a>
+<a href="https://linkedin.com" target="_blank">LinkedIn</a>
+<a href="https://github.com" target="_blank">GitHub</a>
+</div>
+
+</div>
+
+<div class="copyright">
+© 2026 InsurAI. All rights reserved. | <a href="#" style="color:#8398c7;text-decoration:none;">Privacy Policy</a> | <a href="#" style="color:#8398c7;text-decoration:none;">Terms of Service</a>
+</div>
+
+</footer>
+
+<script>
+// ====================
+// BACKEND CONFIGURATION
+// ====================
+window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8080/api';
+console.log('Script loaded. API_BASE_URL:', window);
+// ====================
+// THEME FUNCTIONS
+// ====================
+function toggleTheme(){
+console.log('toggleTheme called');
+document.body.classList.toggle("light");
+localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+}
+
+// ====================
+// LOGIN FUNCTIONS
+// ====================
+function handleLogin(){
+console.log('handleLogin called');
+const email = document.getElementById("loginEmail").value;
+const password = document.getElementById("loginPassword").value;
+const role = document.getElementById("userRole").value;
+const rememberMe = document.getElementById("remember").checked;
+
+console.log('Form values:', {email, password, role, rememberMe});
+
+if(!email || !password || !role){
+alert("Please fill all fields");
+console.log('Validation failed - missing fields');
+return;
+}
+
+console.log('Sending login request to:', `${API_BASE_URL}/auth/login`);
+
+fetch(`${API_BASE_URL}/auth/login`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({
+email: email,
+password: password,
+role: role || 'USER'
+})
+})
+.then(response => {
+console.log('Login response status:', response.status);
+return response.json();
+})
+.then(data => {
+console.log('Login response data:', data);
+if(data.token){
+localStorage.setItem("authToken", data.token);
+localStorage.setItem("userEmail", email);
+if(rememberMe){
+localStorage.setItem("rememberedEmail", email);
+}  
+const routes = {
+  'CUSTOMER': 'user/user-dashboard.html',
+  'AGENT': 'agent/agent-dashboard.html',
+  'UNDERWRITER': 'underwriter/underwriter-dashboard.html',
+  'HR': 'hr/hr-dashboard.html',
+  'RISK_ANALYST': 'admin/admin-dashboard-v2.html',
+  'ADMIN': 'admin/admin-dashboard-v2.html'
+};
+const redirectUrl = routes[role] || 'user/user-dashboard.html';
+console.log('Redirecting to:', redirectUrl);
+window.location.href = redirectUrl;
+}else{
+alert(data.message || "Login failed. Please register.");
+console.log('Login failed:', data);
+}
+})
+.catch(error => {
+console.error("Login error:", error);
+alert("Error: " + error.message + "\nMake sure backend is running on port 8080");
+});
+}
+
+// ====================
+// REGISTER FUNCTIONS
+// ====================
+function showRegister(){
+console.log('showRegister called');
+window.location.href = 'register.html';
+}
+
+// ====================
+// GOOGLE LOGIN FUNCTIONS
+// ====================
+function loginWithGoogle(){
+console.log('loginWithGoogle() called!');
+// Redirect to backend's Google OAuth endpoint
+const googleAuthUrl = `http://localhost:8081/oauth2/authorization/google`;
+console.log('Redirecting to:', googleAuthUrl);
+window.location.href = googleAuthUrl;
+}
+
+// ====================
+// FORGOT PASSWORD FUNCTIONS
+// ====================
+function showForgotPassword(){
+console.log('showForgotPassword called');
+const email = prompt("Enter your email address:");
+console.log('Email from prompt:', email);
+if(email && email.trim()){
+sendPasswordReset(email.trim());
+}
+}
+
+function sendPasswordReset(email){
+console.log('sendPasswordReset called with email:', email);
+fetch(`${API_BASE_URL}/auth/forgot-password`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({ email: email })
+})
+.then(response => {
+console.log('Forgot password response status:', response.status);
+return response.json();
+})
+.then(data => {
+console.log('Forgot password response data:', data);
+if(data.message){
+alert("Password reset link sent to your email!");
+}else{
+alert("Check console - server responded but no message");
+}
+})
+.catch(error => {
+console.error("Forgot password error:", error);
+alert("Connection error: " + error.message);
+});
+}
+
+// ====================
+// CONTACT FORM FUNCTIONS
+// ====================
+function sendContactMessage(){
+console.log('sendContactMessage called');
+const form = document.querySelector(".contact-box");
+const name = form.querySelector("input[type='text']").value;
+const email = form.querySelector("input[type='email']").value;
+const message = form.querySelector("textarea").value;
+
+console.log('Contact form data:', {name, email, message});
+
+if(!name || !email || !message){
+alert("Please fill all fields");
+console.log('Contact validation failed');
+return;
+}
+
+console.log('Sending contact message to:', `${API_BASE_URL}/contact`);
+
+fetch(`${API_BASE_URL}/contact`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({
+name: name,
+email: email,
+message: message
+})
+})
+.then(response => {
+console.log('Contact response status:', response.status);
+return response.json();
+})
+.then(data => {
+console.log('Contact response data:', data);
+alert("Message sent successfully!");
+form.querySelector("input[type='text']").value = '';
+form.querySelector("input[type='email']").value = '';
+form.querySelector("textarea").value = '';
+})
+.catch(error => {
+console.error("Contact error:", error);
+alert("Connection error: " + error.message);
+});
+}
+
+// ====================
+// PAGE INITIALIZATION
+// ====================
+window.addEventListener("DOMContentLoaded", function(){
+console.log('DOMContentLoaded event fired');
+
+// Handle OAuth2 token from Google redirect
+const urlParams = new URLSearchParams(window.location.search);
+const oauth2Token = urlParams.get('token');
+if(oauth2Token){
+console.log('OAuth2 token received from Google redirect');
+localStorage.setItem('authToken', oauth2Token);
+try{
+const payload = JSON.parse(atob(oauth2Token.split('.')[1]));
+if(payload.role){
+localStorage.setItem('userRole', payload.role);
+}
+const userSub = payload.sub || payload.email;
+localStorage.setItem('userEmail', userSub);
+} catch(e){
+console.error('Error parsing OAuth2 token:', e);
+}
+const role = localStorage.getItem('userRole');
+const redirectUrl = role === 'ADMIN'
+    ? 'admin/admin-dashboard-v2.html'
+    : role === 'HR'
+        ? 'hr/hr-dashboard.html'
+        : role === 'RISK_ANALYST'
+            ? 'admin/admin-dashboard-v2.html'
+            : role === 'AGENT'
+                ? 'agent/agent-dashboard.html'
+                : 'user/user-dashboard.html';
+window.location.href = redirectUrl;
+return;
+}
+
+// Load theme
+const savedTheme = localStorage.getItem("theme");
+if(savedTheme === "light"){
+document.body.classList.add("light");
+}
+
+// Load remembered email
+const rememberedEmail = localStorage.getItem("rememberedEmail");
+if(rememberedEmail){
+const emailInput = document.getElementById("loginEmail");
+if(emailInput){
+emailInput.value = rememberedEmail;
+const rememberCheckbox = document.getElementById("remember");
+if(rememberCheckbox){
+rememberCheckbox.checked = true;
+}
+}
+}
+
+// Setup smooth scroll for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function(e){
+if(this.getAttribute('href') !== '#'){
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if(target){
+target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+}
+});
+});
+
+// Setup input focus effects
+document.querySelectorAll("input, textarea").forEach(input => {
+input.addEventListener("focus", function(){
+this.style.boxShadow = "0 0 20px rgba(59, 130, 246, 0.4)";
+});
+
+input.addEventListener("blur", function(){
+this.style.boxShadow = "none";
+});
+});
+
+console.log('DOMContentLoaded initialization complete');
+});
+
+// Add fade-in animation on page load
+window.addEventListener("load", function(){
+console.log('Page load event fired');
+document.querySelectorAll("section").forEach((section, index) => {
+section.style.animationDelay = (index * 0.1) + "s";
+});
+});
+
+// Test function to check if scripts are loaded
+window.testScripts = function(){
+console.log('Testing scripts...');
+console.log('handleLogin:', typeof handleLogin);
+console.log('showRegister:', typeof showRegister);
+console.log('showForgotPassword:', typeof showForgotPassword);
+console.log('sendContactMessage:', typeof sendContactMessage);
+console.log('API_BASE_URL:', API_BASE_URL);
+alert('Scripts loaded! Check console for details.');
+};
+
+console.log('All functions defined and ready!');
+</script>
+
+</body>
+</html>

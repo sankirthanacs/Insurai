@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsurAI - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 1000px;
+            width: 90%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .left {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .left p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .right {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right h2 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .toggle-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .toggle-tabs button {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-tabs button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .social-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .google-btn {
+            border-color: #dadce0;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .left {
+                padding: 40px 30px;
+            }
+
+            .right {
+                padding: 40px 30px;
+            }
+
+            .left h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>Welcome to InsurAI</h1>
+            <p>
+                Intelligent Insurance Claim Management System. Submit and track your insurance claims with 
+                ease and transparency using AI-powered insights.
+            </p>
+        </div>
+
+        <div class="right">
+            <h2>Get Started</h2>
+
+            <div class="toggle-tabs">
+                <button class="active" onclick="switchTab('login')">Login</button>
+                <button onclick="switchTab('register')">Register</button>
+            </div>
+
+            <div id="errorMsg" class="error"></div>
+            <div id="successMsg" class="success"></div>
+            <div id="loading" class="loading">Processing...</div>
+
+            <!-- Login Form -->
+            <div id="login" class="tab-content active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+                
+                <!-- Social Login Section -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    <p style="text-align: center; color: #666; margin-bottom: 15px; font-size: 14px;">Or continue with</p>
+                    <button type="button" class="social-btn google-btn" onclick="loginWithGoogle()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Google
+                    </button>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register" class="tab-content">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="registerPassword" placeholder="Minimum 6 characters" required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="registerRole" required>
+                            <option value="">Select a role</option>
+                            <option value="CUSTOMER">👤 Customer</option>
+                            <option value="UNDERWRITER">🔍 Claim Adjuster</option>
+                            <option value="HR">👤 HR</option>
+                            <option value="ADMIN">👨‍💻 Administrator</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        function switchTab(tab) {
+            try {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.toggle-tabs button').forEach(el => el.classList.remove('active'));
+                
+                const tabElement = document.getElementById(tab);
+                if (tabElement) {
+                    tabElement.classList.add('active');
+                }
+                
+                const activeButton = event.target;
+                if (activeButton && activeButton.classList) {
+                    activeButton.classList.add('active');
+                }
+                
+                clearMessages();
+            } catch (error) {
+                console.error('Error switching tab:', error);
+            }
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            setTimeout(() => {
+                errorEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMsg');
+            successEl.textContent = message;
+            successEl.style.display = 'block';
+            setTimeout(() => {
+                successEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearMessages() {
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+
+        function showLoading(show = true) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            clearMessages();
+            showLoading(true);
+
+            try {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (!email || !password) {
+                    showError('Please enter email and password');
+                    showLoading(false);
+                    return;
+                }
+
+                console.log('🔐 Attempting login for email:', email);
+                console.log('🔐 Current localStorage before login:', {
+                    authToken: localStorage.getItem('authToken') ? 'EXISTS' : 'MISSING',
+                    userEmail: localStorage.getItem('userEmail'),
+                    userRole: localStorage.getItem('userRole')
+                });
+
+                // Call login API with default role
+                const response = await apiRequest('/auth/login', 'POST', { 
+                    email, 
+                    password, 
+                    role: 'USER' 
+                });
+
+                if (response && response.token) {
+                    console.log('✅ Login successful, received token');
+                    
+                    // ✅ FIX: Clear all old authentication data first
+                    console.log('🧹 Clearing old authentication data...');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userRole');
+                    localStorage.removeItem('userName');
+                    
+                    // Store new authentication data
+                    localStorage.setItem('authToken', response.token);
+                    localStorage.setItem('userEmail', email);
+                    
+                    // Store user role if available
+                    try {
+                        const payload = JSON.parse(atob(response.token.split('.')[1]));
+                        console.log('🔓 Token payload:', payload);
+                        if (payload.role) {
+                            localStorage.setItem('userRole', payload.role);
+                            console.log('👤 User role stored:', payload.role);
+                        }
+                        if (payload.sub) {
+                            console.log('📧 Token subject (email):', payload.sub);
+                        }
+                    } catch (e) {
+                        console.error('❌ Error parsing token:', e);
+                    }
+                    
+                    console.log('✅ New authentication data stored:', {
+                        authToken: 'STORED',
+                        userEmail: email,
+                        userRole: localStorage.getItem('userRole')
+                    });
+                    
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    // Redirect based on role
+                    try {
+                        const payload = JSON.parse(atob(response.token.split('.')[1]));
+                        const redirectUrl = payload.role === 'ADMIN'
+                            ? 'admin/admin-dashboard-v2.html'
+                            : payload.role === 'HR'
+                                ? 'hr/hr-dashboard.html'
+                                : payload.role === 'RISK_ANALYST'
+                                    ? 'risk/risk-dashboard.html'
+                                    : payload.role === 'AGENT'
+                                        ? 'agent/agent-dashboard.html'
+                                        : payload.role === 'UNDERWRITER'
+                                            ? 'underwriter/underwriter-dashboard.html'
+                                            : 'user/user-dashboard.html';
+                        setTimeout(() => {
+                            window.location.href = redirectUrl;
+                        }, 1500);
+                    } catch (e) {
+                        // Default redirect
+                        setTimeout(() => {
+                            window.location.href = 'user/user-dashboard.html';
+                        }, 1500);
+                    }
+                } else {
+                    showError('Invalid credentials. Please try again.');
+                }
+            } catch (error) {
+                showError(error.message || 'Login failed. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            clearMessages();
+
+            try {
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('registerRole').value;
+
+                if (!email || !password || !confirmPassword) {
+                    showError('Please fill in all fields');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showError('Passwords do not match!');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showError('Password must be at least 6 characters');
+                    return;
+                }
+
+                showLoading(true);
+
+                await apiRequest('/auth/register', 'POST', { email, password, role });
+
+                showSuccess('Registration successful! Please login.');
+                setTimeout(() => {
+                    switchTab('login');
+                    document.getElementById('loginEmail').value = email;
+                    // Clear password fields
+                    document.getElementById('loginPassword').value = '';
+                }, 1500);
+            } catch (error) {
+                showError(error.message || 'Registration failed. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function loginWithGoogle() {
+            console.log('loginWithGoogle() called!');
+            // Redirect to backend's Google OAuth endpoint
+            const googleAuthUrl = `http://localhost:8080/oauth2/authorization/google`;
+            console.log('Redirecting to:', googleAuthUrl);
+            window.location.href = googleAuthUrl;
+        }
+
+        // Handle OAuth2 token from URL
+        function handleOAuth2Token() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            
+            if (token) {
+                console.log('OAuth2 token received:', token);
+                localStorage.setItem('authToken', token);
+                
+                // Get user role and email from token
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    if (payload.role) {
+                        localStorage.setItem('userRole', payload.role);
+                    }
+                    if (payload.sub || payload.email) {
+                        localStorage.setItem('userEmail', payload.email || payload.sub);
+                    }
+                } catch (e) {
+                    console.error('Error parsing token:', e);
+                }
+                
+                // Redirect to dashboard
+                const role = localStorage.getItem('userRole');
+                const redirectUrl = role === 'ADMIN'
+                    ? 'admin/admin-dashboard-v2.html'
+                    : role === 'HR'
+                        ? 'hr/hr-dashboard.html'
+                        : role === 'RISK_ANALYST'
+                            ? 'risk/risk-dashboard.html'
+                            : role === 'AGENT'
+                                ? 'agent/agent-dashboard.html'
+                                : 'user/user-dashboard.html';
+                window.location.href = redirectUrl;
+            }
+        }
+
+        // Check for Google button on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const googleBtn = document.querySelector('.google-btn');
+            console.log('Google button found:', googleBtn ? 'YES' : 'NO');
+            if (googleBtn) {
+                console.log('Google button HTML:', googleBtn.outerHTML.substring(0, 100));
+                console.log('Google button visible:', window.getComputedStyle(googleBtn).display);
+            }
+        });
+
+        // Check if already logged in
+        handleOAuth2Token();
+        if (isAuthenticated()) {
+            const role = localStorage.getItem('userRole');
+            const redirectUrl = role === 'ADMIN'
+                ? 'admin/admin-dashboard-v2.html'
+                : role === 'HR'
+                    ? 'hr/hr-dashboard.html'
+                    : role === 'RISK_ANALYST'
+                        ? 'risk/risk-dashboard.html'
+                        : role === 'AGENT'
+                            ? 'agent/agent-dashboard.html'
+                            : 'user/user-dashboard.html';
+            window.location.href = redirectUrl;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.10.7-hotspot"
+        }
+    ],
+    "java.jdt.ls.vmargs": "-javaagent:C:\\Users\\acer\\.m2\\repository\\org\\projectlombok\\lombok\\1.18.30\\lombok-1.18.30.jar",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "xml.validation": false,
+    "problems.decorations.enabled": false,
+    "liveServer.settings.root": "frontend"
+}

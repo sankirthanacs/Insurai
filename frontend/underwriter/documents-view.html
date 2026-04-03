@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsurAI - Document Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --sidebar-bg: #1e3a8a;
+            --sidebar-dark: #1e40af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-logo {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo span {
+            background: linear-gradient(135deg, #60a5fa, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 14px 20px;
+            color: #bfdbfe;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(147, 197, 253, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(147, 197, 253, 0.2);
+            border-left-color: #60a5fa;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Documents Grid */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .document-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .document-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .document-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .document-icon {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .document-type {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .document-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .document-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-secondary {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h1>InsurAI <span>UW</span></h1>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-item" onclick="window.location.href='underwriter-dashboard.html'">
+                    <span>📊</span>
+                    Dashboard
+                </div>
+                <div class="nav-item active">
+                    <span>📄</span>
+                    Documents
+                </div>
+                <div class="nav-item" onclick="window.location.href='../admin/admin-dashboard-v2.html'">
+                    <span>⚙️</span>
+                    Admin
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Document Management</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="refreshDocuments()">
+                        <span>🔄</span>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <select class="filter-select" id="userFilter">
+                    <option value="">All Users</option>
+                </select>
+                <select class="filter-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="CLAIM_DOCUMENT">Claim Documents</option>
+                    <option value="POLICY_DOCUMENT">Policy Documents</option>
+                    <option value="ID_DOCUMENT">ID Documents</option>
+                    <option value="MEDICAL_REPORT">Medical Reports</option>
+                    <option value="RECEIPT">Receipts</option>
+                </select>
+                <select class="filter-select" id="dateFilter">
+                    <option value="">All Dates</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+
+            <!-- Documents Grid -->
+            <div class="documents-grid" id="documentsGrid">
+                <div class="loading">Loading documents...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/realtime.js"></script>
+    <script src="../js/dashboard-sync.js"></script>
+    <script>
+        let allDocuments = [];
+        let allUsers = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDocuments();
+            loadUsers();
+            setupFilters();
+            initializeSync();
+        });
+
+        // Initialize sync
+        function initializeSync() {
+            if (window.dashboardSync) {
+                window.dashboardSync.on('documentUploaded', () => {
+                    loadDocuments();
+                });
+            }
+        }
+
+        // Load all documents
+        async function loadDocuments() {
+            try {
+                const documents = await getAllDocuments();
+                allDocuments = documents || [];
+                renderDocuments(allDocuments);
+            } catch (error) {
+                console.error('Error loading documents:', error);
+                document.getElementById('documentsGrid').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">📄</div><p>Failed to load documents</p></div>';
+            }
+        }
+
+        // Load users for filter
+        async function loadUsers() {
+            try {
+                // This would need a backend endpoint to get all users
+                // For now, we'll extract unique users from documents
+                const userFilter = document.getElementById('userFilter');
+                const users = [...new Set(allDocuments.map(doc => doc.userEmail))];
+                users.forEach(email => {
+                    const option = document.createElement('option');
+                    option.value = email;
+                    option.textContent = email;
+                    userFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // Render documents
+        function renderDocuments(documents) {
+            const grid = document.getElementById('documentsGrid');
+
+            if (!documents || documents.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📄</div><p>No documents found</p></div>';
+                return;
+            }
+
+            grid.innerHTML = '';
+
+            documents.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'document-card';
+
+                const fileName = doc.fileName || 'Unknown File';
+                const fileSize = doc.size ? formatFileSize(doc.size) : 'Unknown size';
+                const uploadDate = doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : 'Unknown date';
+                const userEmail = doc.userEmail || 'Unknown user';
+                const docType = doc.documentType || 'GENERAL';
+
+                card.innerHTML = `
+                    <div class="document-header">
+                        <div class="document-icon">📄</div>
+                        <div class="document-type">${docType}</div>
+                    </div>
+                    <div class="document-name">${fileName}</div>
+                    <div class="document-meta">User: ${userEmail}</div>
+                    <div class="document-meta">Size: ${fileSize}</div>
+                    <div class="document-meta">Uploaded: ${uploadDate}</div>
+                    <div class="document-actions">
+                        <button class="btn btn-primary btn-sm" onclick="viewDocument(${doc.id})">
+                            <span>👁️</span>
+                            View
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="downloadDocument(${doc.id})">
+                            <span>⬇️</span>
+                            Download
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Setup filters
+        function setupFilters() {
+            document.getElementById('userFilter').addEventListener('change', applyFilters);
+            document.getElementById('typeFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const userFilter = document.getElementById('userFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+
+            let filtered = allDocuments;
+
+            if (userFilter) {
+                filtered = filtered.filter(doc => doc.userEmail === userFilter);
+            }
+
+            if (typeFilter) {
+                filtered = filtered.filter(doc => doc.documentType === typeFilter);
+            }
+
+            if (dateFilter) {
+                const now = new Date();
+                filtered = filtered.filter(doc => {
+                    const uploadDate = new Date(doc.uploadedAt);
+                    switch (dateFilter) {
+                        case 'today':
+                            return uploadDate.toDateString() === now.toDateString();
+                        case 'week':
+                            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            return uploadDate >= weekAgo;
+                        case 'month':
+                            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            return uploadDate >= monthAgo;
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            renderDocuments(filtered);
+        }
+
+        // View document
+        async function viewDocument(docId) {
+            try {
+                const response = await downloadDocument(docId);
+                if (response) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                }
+            } catch (error) {
+                console.error('Error viewing document:', error);
+                alert('Failed to view document');
+            }
+        }
+
+        // Download document
+        async function downloadDocument(docId) {
+            if (!docId || Number.isNaN(Number(docId))) {
+                alert('Document ID missing or invalid');
+                return null;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/documents/${docId}/download`, {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Download failed');
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `document_${docId}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error downloading document:', error);
+                alert('Failed to download document');
+            }
+        }
+
+        // Refresh documents
+        function refreshDocuments() {
+            loadDocuments();
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
