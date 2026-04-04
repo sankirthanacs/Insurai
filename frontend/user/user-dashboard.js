@@ -21,7 +21,7 @@ window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
 const API_CONFIG = {
-  baseUrl: `${API}/api`,
+  baseUrl: window.API_BASE_URL || `${window.API_HOST}/api`,
   endpoints: {
     // User endpoints
     userProfile: '/user/profile',

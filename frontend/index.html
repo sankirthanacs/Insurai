@@ -8,6 +8,8 @@
 
 <title>InsurAI - AI Insurance Fraud Detection</title>
 
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1428,8 +1430,8 @@ Advanced AI-powered insurance fraud detection platform protecting businesses wor
 // BACKEND CONFIGURATION
 // ====================
 // For static pages (non-module) we prefer environment injection via global variable,
-// fallback to production Railway backend. No localhost fallback in deployment.
-window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+// fallback to production Railway backend. For local development, use localhost.
+window.API_HOST = window.__API_URL__ || 'http://localhost:8080';
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 console.log('Script loaded. API_BASE_URL:', window.API_BASE_URL, 'API_HOST:', window.API_HOST);
 // ====================
@@ -1502,7 +1504,9 @@ console.log('Login failed:', data);
 })
 .catch(error => {
 console.error("Login error:", error);
-        alert("Error: " + error.message + "\nPlease check VITE_API_URL and that backend is reachable at https://insurai.railway.app");
+alert("Error: " + error.message + "\nPlease check VITE_API_URL and that backend is reachable at https://insurai.railway.app");
+});
+}
 
 // ====================
 // REGISTER FUNCTIONS

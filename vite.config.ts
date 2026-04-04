@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const apiBackEnd = env.VITE_API_URL || 'http://localhost:8080'
-  const wsBackEnd = env.VITE_WS_URL || 'ws://localhost:8080'
+  const apiBackEnd = env.VITE_API_URL || 'https://insurai.railway.app'
+  const wsBackEnd = env.VITE_WS_URL || 'wss://insurai.railway.app'
 
   return defineConfig({
     plugins: [
