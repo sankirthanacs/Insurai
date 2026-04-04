@@ -10,17 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins(
-                    "https://insurai-mglx.vercel.app",
-                    "https://insurai-1iumsz65g-sankirthanas-projects.vercel.app",
-                    "https://insurai-7yochabcc-sankirthanas-projects.vercel.app",
-                    "https://insurai-eight.vercel.app",
-                    "https://insurai.railway.app",
-                    "https://insurai-lhup.onrender.com",
-                    "http://localhost:5173",
-                    "http://localhost:8080",
-                    "http://127.0.0.1:8080"
-                )
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
