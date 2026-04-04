@@ -9,7 +9,7 @@ function initDashboardSync() {
         eventSource.close();
     }
 
-    const API = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
+    const API = window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com';
     const sseUrl = `${API}/dashboard-updates`;
     eventSource = new EventSource(sseUrl);
 

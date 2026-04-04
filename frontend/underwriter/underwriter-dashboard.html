@@ -3242,7 +3242,7 @@
 
     <script>
         // Configuration
-        window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+        window.API_HOST = window.__API_URL__ || 'https://insurai-lhup.onrender.com';
         const API_BASE = window.API_HOST;
         window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
@@ -7502,7 +7502,7 @@
                 const wsUrl = window.WEBSOCKET_URL || (
                     window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                         ? 'ws://localhost:8080/ws/dashboard'
-                        : 'wss://insurai.railway.app/ws/dashboard'
+                        : 'wss://insurai-lhup.onrender.com/ws/dashboard'
                 );
                 console.log('[Underwriter] Connecting to WebSocket:', wsUrl);
                 

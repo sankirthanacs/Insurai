@@ -1504,7 +1504,7 @@ console.log('Login failed:', data);
 })
 .catch(error => {
 console.error("Login error:", error);
-alert("Error: " + error.message + "\nPlease check VITE_API_URL and that backend is reachable at https://insurai.railway.app");
+alert("Error: " + error.message + "\nPlease check VITE_API_URL and that backend is reachable at https://insurai-lhup.onrender.com");
 });
 }
 
@@ -1522,7 +1522,7 @@ window.location.href = 'register.html';
 function loginWithGoogle(){
 console.log('loginWithGoogle() called!');
 // Redirect to backend's Google OAuth endpoint
-const API = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
+const API = window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com';
 const googleAuthUrl = `${API}/oauth2/authorization/google`;
 console.log('Redirecting to:', googleAuthUrl);
 window.location.href = googleAuthUrl;

@@ -1,7 +1,7 @@
 // api.js
 
 // 🧩 Production base URL constant (Railway backend) and optional override
-const BASE_URL = 'https://insurai.railway.app';
+const BASE_URL = 'https://insurai-lhup.onrender.com';
 window.API_HOST = window.__API_URL__ || BASE_URL;
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 

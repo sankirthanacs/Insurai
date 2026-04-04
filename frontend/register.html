@@ -281,7 +281,7 @@ Already have an account? <a onclick="goBack()">Sign in</a>
 </div>
 
 <script>
-window.API_HOST = window.__API_URL__ || 'https://insurai.railway.app';
+window.API_HOST = window.__API_URL__ || 'https://insurai-lhup.onrender.com';
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 
 function goBack(){
@@ -386,7 +386,7 @@ if(response.ok){
 }
 }catch(error){
 console.error("Registration error:", error);
-alert("Connection error. Check VITE_API_URL / backend URL (https://insurai.railway.app)");
+alert("Connection error. Check VITE_API_URL / backend URL (https://insurai-lhup.onrender.com)");
 }
 }
 </script>

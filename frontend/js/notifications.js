@@ -181,7 +181,7 @@ function setupNotificationStream(onNotification, onError) {
 
 function createNotificationEventSource(onNotification, onError) {
     const token = localStorage.getItem('authToken');
-    const API = window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app';
+    const API = window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com';
     const API_BASE_URL = window.API_BASE_URL || `${API}/api`;
 
     if (!token) {

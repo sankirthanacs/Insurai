@@ -4,9 +4,9 @@
 let dashboardRealtime = {
     // Configuration
     config: {
-        apiHost: window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app',
-        sseUrl: `${window.API_BASE_URL || `${window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app'}/api`}/dashboard-updates`,
-        wsUrl: window.WS_URL || window.__WS_URL__ || `wss://${new URL(window.API_HOST || window.__API_URL__ || 'https://insurai.railway.app').host}/ws/dashboard`,
+        apiHost: window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com',
+        sseUrl: `${window.API_BASE_URL || `${window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com'}/api`}/dashboard-updates`,
+        wsUrl: window.WS_URL || window.__WS_URL__ || `wss://${new URL(window.API_HOST || window.__API_URL__ || 'https://insurai-lhup.onrender.com').host}/ws/dashboard`,
         reconnectInterval: 5000,
         updateInterval: 30000, // 30 seconds for polling fallback
         maxRetries: 5
