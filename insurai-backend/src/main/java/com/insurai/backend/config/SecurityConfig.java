@@ -65,6 +65,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
             "https://insurai-mglx.vercel.app",
+            "https://insurai-1iumsz65g-sankirthanas-projects.vercel.app",
             "https://insurai-eight.vercel.app",
             "https://insurai.railway.app",
             "http://localhost:8080",
