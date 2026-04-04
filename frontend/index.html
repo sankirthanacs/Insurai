@@ -1431,7 +1431,7 @@ Advanced AI-powered insurance fraud detection platform protecting businesses wor
 // ====================
 // For static pages (non-module) we prefer environment injection via global variable,
 // fallback to production Railway backend. For local development, use localhost.
-window.API_HOST = window.__API_URL__ || 'http://localhost:8080';
+window.API_HOST = window.__API_URL__ || 'https://insurai-lhup.onrender.com';
 window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
 console.log('Script loaded. API_BASE_URL:', window.API_BASE_URL, 'API_HOST:', window.API_HOST);
 // ====================
