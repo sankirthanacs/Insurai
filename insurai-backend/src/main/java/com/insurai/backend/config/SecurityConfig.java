@@ -63,17 +63,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(
-            "https://insurai-mglx.vercel.app",
-            "https://insurai-1iumsz65g-sankirthanas-projects.vercel.app",
-            "https://insurai-eight.vercel.app",
-            "https://insurai.railway.app",
-            "http://localhost:8080",
-            "http://127.0.0.1:8080"
-        ));
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
