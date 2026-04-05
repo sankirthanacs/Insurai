@@ -2,6 +2,7 @@ package com.insurai.backend.security;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -18,6 +19,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final JwtUtil jwtUtil;
+    
+    @Value("${insurai.frontend.url}")
+    private String frontendUrl;
 
     public OAuth2SuccessHandler(UserRepository userRepository, RoleRepository roleRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
@@ -62,8 +66,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String token = jwtUtil.generateToken(email, roleName);
 
         // Redirect to frontend with token
-        // Adjust this URL based on where your frontend is hosted
-        String redirectUrl = "http://localhost:3000/frontend/user/user-dashboard.html?token=" + token;
+        String redirectUrl = frontendUrl + "/user/user-dashboard.html?token=" + token;
         response.sendRedirect(redirectUrl);
     }
 }
