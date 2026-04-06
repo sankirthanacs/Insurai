@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.insurai.backend.DashboardWebSocketHandler;
 import com.insurai.backend.entity.Document;
 import com.insurai.backend.entity.Notification;
@@ -43,12 +47,24 @@ public class DocumentService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired(required = false)
+    private Cloudinary cloudinary;
+
+    private boolean useCloudinary = false;
+
     @PostConstruct
     public void init() {
-        try {
-            Files.createDirectories(Paths.get(uploadDir));
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize upload directory", e);
+        if (cloudinary != null) {
+            useCloudinary = true;
+            System.out.println("[DocumentService] Cloudinary is configured and enabled");
+        } else {
+            useCloudinary = false;
+            System.out.println("[DocumentService] Cloudinary not configured, using local storage");
+            try {
+                Files.createDirectories(Paths.get(uploadDir));
+            } catch (IOException e) {
+                throw new RuntimeException("Could not initialize upload directory", e);
+            }
         }
     }
 
@@ -69,21 +85,37 @@ public class DocumentService {
             extension = originalFilename.substring(dot);
         }
 
-        String storedFileName = UUID.randomUUID().toString() + extension;
-        Path storagePath = Paths.get(uploadDir).resolve(storedFileName);
-
-        Files.copy(file.getInputStream(), storagePath);
-
         Document document = new Document();
         document.setUserId(user.getId());
         document.setFileName(originalFilename);
         document.setContentType(file.getContentType() == null ? "application/octet-stream" : file.getContentType());
         document.setSize(file.getSize());
-        document.setStoragePath(storagePath.toAbsolutePath().toString());
+
+        if (useCloudinary && cloudinary != null) {
+            String publicId = "documents/" + UUID.randomUUID().toString();
+            
+            Map<String, Object> params = ObjectUtils.asMap(
+                "public_id", publicId,
+                "resource_type", "auto",
+                "folder", "insurai/documents"
+            );
+            
+            @SuppressWarnings("unchecked")
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
+            
+            String secureUrl = (String) uploadResult.get("secure_url");
+            document.setStoragePath(secureUrl);
+            
+            System.out.println("[DocumentService] Uploaded to Cloudinary: " + secureUrl);
+        } else {
+            String storedFileName = UUID.randomUUID().toString() + extension;
+            Path storagePath = Paths.get(uploadDir).resolve(storedFileName);
+            Files.copy(file.getInputStream(), storagePath);
+            document.setStoragePath(storagePath.toAbsolutePath().toString());
+        }
 
         Document savedDocument = documentRepository.save(document);
 
-        // Send WebSocket notification for real-time update
         try {
             String documentId = "DOC-" + savedDocument.getId();
             String message = String.format(
@@ -95,7 +127,6 @@ public class DocumentService {
             System.err.println("Failed to send WebSocket notification: " + e.getMessage());
         }
 
-        // Create and send notification via SSE
         try {
             Notification notification = new Notification();
             notification.setUserId(user.getId());
@@ -147,7 +178,6 @@ public class DocumentService {
                 .orElseThrow(() -> new RuntimeException("Document not found"));
     }
 
-    // Underwriter-specific methods
     public List<Document> getAllDocuments() {
         return documentRepository.findAllByOrderByUploadedAtDesc();
     }

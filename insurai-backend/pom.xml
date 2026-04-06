@@ -161,6 +161,13 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
+
+        <!-- Cloudinary for file storage -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.34.0</version>
+        </dependency>
     </dependencies>
 
     <build>

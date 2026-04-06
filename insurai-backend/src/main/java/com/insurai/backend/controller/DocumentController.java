@@ -1,6 +1,7 @@
 package com.insurai.backend.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -100,7 +102,7 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}/view")
-    public ResponseEntity<Resource> viewDocument(@PathVariable Long id) {
+    public ResponseEntity<?> viewDocument(@PathVariable Long id) {
         System.out.println("[DEBUG] viewDocument called with id: " + id);
         try {
             Optional<Document> docOpt = documentRepository.findById(id);
@@ -112,9 +114,17 @@ public class DocumentController {
             }
             
             Document document = docOpt.get();
-            System.out.println("[DEBUG] Document storagePath: " + document.getStoragePath());
+            String storagePath = document.getStoragePath();
+            System.out.println("[DEBUG] Document storagePath: " + storagePath);
 
-            Path filePath = Paths.get(document.getStoragePath());
+            if (storagePath.startsWith("http")) {
+                System.out.println("[DEBUG] Cloudinary URL detected, redirecting");
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .location(URI.create(storagePath))
+                        .build();
+            }
+
+            Path filePath = Paths.get(storagePath);
             System.out.println("[DEBUG] Full file path: " + filePath.toAbsolutePath());
             
             Resource resource = new FileSystemResource(filePath);
@@ -141,7 +151,7 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {
+    public ResponseEntity<?> downloadDocument(@PathVariable Long id) {
         System.out.println("[DEBUG] downloadDocument called with id: " + id);
         try {
             Optional<Document> docOpt = documentRepository.findById(id);
@@ -152,7 +162,17 @@ public class DocumentController {
             }
             
             Document document = docOpt.get();
-            Path filePath = Paths.get(document.getStoragePath());
+            String storagePath = document.getStoragePath();
+            
+            if (storagePath.startsWith("http")) {
+                System.out.println("[DEBUG] Cloudinary URL detected, redirecting");
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .location(URI.create(storagePath))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"")
+                        .build();
+            }
+
+            Path filePath = Paths.get(storagePath);
             Resource resource = new FileSystemResource(filePath);
 
             if (!resource.exists()) {
