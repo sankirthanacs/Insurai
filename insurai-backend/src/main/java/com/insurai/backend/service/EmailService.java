@@ -81,14 +81,24 @@ public class EmailService {
 
     private void sendEmail(String to, String subject, String body) {
         try {
+            System.out.println("=== EMAIL DEBUG ===");
+            System.out.println("To: " + to);
+            System.out.println("Subject: " + subject);
+            System.out.println("==================");
+            
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(body, true);
             mailSender.send(message);
+            System.out.println("Email sent successfully to: " + to);
         } catch (MessagingException e) {
-            System.err.println("Failed to send email to " + to + ": " + e.getMessage());
+            System.err.println("MessagingException sending email to " + to + ": " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Exception sending email to " + to + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
