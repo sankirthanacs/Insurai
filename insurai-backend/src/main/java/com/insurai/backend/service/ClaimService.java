@@ -40,6 +40,9 @@ public class ClaimService {
     private NotificationService notificationService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     public Page<Claim> getAllClaims(Pageable pageable) {
@@ -140,6 +143,13 @@ public class ClaimService {
             System.err.println("Failed to create notification: " + e.getMessage());
         }
 
+        // Send confirmation email
+        try {
+            emailService.sendClaimSubmissionEmail(user, savedClaim);
+        } catch (Exception e) {
+            System.err.println("Failed to send confirmation email: " + e.getMessage());
+        }
+
         return savedClaim;
     }
 
@@ -201,6 +211,13 @@ public class ClaimService {
                 notification.setRead(false);
                 notification.setCreatedDate(LocalDateTime.now());
                 notificationService.saveNotification(notification);
+
+                // Send approval email
+                try {
+                    emailService.sendClaimApprovalEmail(user, savedClaim);
+                } catch (Exception e) {
+                    System.err.println("Failed to send approval email: " + e.getMessage());
+                }
             }
         } catch (Exception e) {
             System.err.println("Failed to create notification: " + e.getMessage());
@@ -244,6 +261,13 @@ public class ClaimService {
                 notification.setRead(false);
                 notification.setCreatedDate(LocalDateTime.now());
                 notificationService.saveNotification(notification);
+
+                // Send rejection email
+                try {
+                    emailService.sendClaimRejectionEmail(user, savedClaim);
+                } catch (Exception e) {
+                    System.err.println("Failed to send rejection email: " + e.getMessage());
+                }
             }
         } catch (Exception e) {
             System.err.println("Failed to create notification: " + e.getMessage());

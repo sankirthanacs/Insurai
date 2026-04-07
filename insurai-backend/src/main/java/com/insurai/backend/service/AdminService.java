@@ -24,15 +24,17 @@ public class AdminService {
     private final SubscriptionRepository subscriptionRepository;
     private final ClaimEventProducer claimEventProducer;
     private final NotificationService notificationService;
+    private final EmailService emailService;
 
     public AdminService(UserRepository userRepository, ClaimRepository claimRepository,
                         SubscriptionRepository subscriptionRepository, ClaimEventProducer claimEventProducer,
-                        NotificationService notificationService) {
+                        NotificationService notificationService, EmailService emailService) {
         this.userRepository = userRepository;
         this.claimRepository = claimRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.claimEventProducer = claimEventProducer;
         this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     public Map<String, Object> getAdminDashboardData() {
@@ -302,6 +304,15 @@ public class AdminService {
                 System.err.println("Failed to send claim-approved notification: " + e.getMessage());
             }
 
+            try {
+                User user = userRepository.findById(claim.getUserId()).orElse(null);
+                if (user != null) {
+                    emailService.sendClaimApprovalEmail(user, claim);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to send approval email: " + e.getMessage());
+            }
+
             result.put("success", true);
             result.put("message", "Claim approved successfully");
             result.put("claimId", claimId);
@@ -340,6 +351,15 @@ public class AdminService {
                 notificationService.saveNotification(notification);
             } catch (Exception e) {
                 System.err.println("Failed to send claim-rejected notification: " + e.getMessage());
+            }
+
+            try {
+                User user = userRepository.findById(claim.getUserId()).orElse(null);
+                if (user != null) {
+                    emailService.sendClaimRejectionEmail(user, claim);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to send rejection email: " + e.getMessage());
             }
 
             result.put("success", true);
