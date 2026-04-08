@@ -36,6 +36,10 @@ public class Document {
     @Column(nullable = false)
     private LocalDateTime uploadedAt;
 
+    private String userEmail;
+
+    private String documentType;
+
     public Document() {
     }
 
@@ -109,5 +113,21 @@ public class Document {
 
     public void setUploadedAt(LocalDateTime uploadedAt) {
         this.uploadedAt = uploadedAt;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 }

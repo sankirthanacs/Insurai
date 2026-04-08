@@ -77,7 +77,13 @@ public class DocumentController {
         long count = documentRepository.count();
         List<Document> allDocs = documentRepository.findAll();
         return ResponseEntity.ok(Map.of("count", count, "documents", allDocs.stream().map(d -> 
-            Map.of("id", d.getId(), "fileName", d.getFileName(), "storagePath", d.getStoragePath())
+            Map.of("id", d.getId(), "fileName", d.getFileName(), "storagePath", d.getStoragePath(), 
+                "contentType", d.getContentType() != null ? d.getContentType() : "application/octet-stream",
+                "size", d.getSize() != null ? d.getSize() : 0,
+                "userId", d.getUserId() != null ? d.getUserId() : 0,
+                "userEmail", d.getUserEmail() != null ? d.getUserEmail() : "",
+                "documentType", d.getDocumentType() != null ? d.getDocumentType() : "GENERAL",
+                "uploadedAt", d.getUploadedAt() != null ? d.getUploadedAt().toString() : "")
         ).toList()));
     }
 

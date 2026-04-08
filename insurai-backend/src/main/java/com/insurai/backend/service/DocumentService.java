@@ -22,7 +22,6 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.insurai.backend.DashboardWebSocketHandler;
 import com.insurai.backend.entity.Document;
-import com.insurai.backend.entity.Notification;
 import com.insurai.backend.entity.User;
 import com.insurai.backend.repository.DocumentRepository;
 import com.insurai.backend.repository.UserRepository;
@@ -43,9 +42,6 @@ public class DocumentService {
 
     @Autowired
     private DashboardWebSocketHandler dashboardWebSocketHandler;
-
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired(required = false)
     private Cloudinary cloudinary;
@@ -87,9 +83,11 @@ public class DocumentService {
 
         Document document = new Document();
         document.setUserId(user.getId());
+        document.setUserEmail(userEmail);
         document.setFileName(originalFilename);
         document.setContentType(file.getContentType() == null ? "application/octet-stream" : file.getContentType());
         document.setSize(file.getSize());
+        document.setDocumentType("GENERAL");
 
         if (useCloudinary && cloudinary != null) {
             String publicId = "documents/" + UUID.randomUUID().toString();
@@ -125,19 +123,6 @@ public class DocumentService {
             dashboardWebSocketHandler.broadcastMessage(message);
         } catch (Exception e) {
             System.err.println("Failed to send WebSocket notification: " + e.getMessage());
-        }
-
-        try {
-            Notification notification = new Notification();
-            notification.setUserId(user.getId());
-            notification.setTitle("Document Uploaded");
-            notification.setMessage("Your document \"" + savedDocument.getFileName() + "\" has been uploaded successfully.");
-            notification.setType("DOCUMENT");
-            notification.setRead(false);
-            notification.setCreatedDate(LocalDateTime.now());
-            notificationService.saveNotification(notification);
-        } catch (Exception e) {
-            System.err.println("Failed to create notification: " + e.getMessage());
         }
 
         return savedDocument;

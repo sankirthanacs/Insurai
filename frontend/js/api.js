@@ -216,3 +216,38 @@ window.fetchFraudAlerts = fetchFraudAlerts;
 window.fetchDecisions = fetchDecisions;
 window.fetchNotificationsAPI = fetchNotificationsAPI;
 window.fetchRecentClaims = fetchRecentClaims;
+
+// Document APIs
+async function getAllDocuments() {
+    return await apiRequest('/documents/test');
+}
+
+async function viewDocumentApi(docId) {
+    const token = getToken();
+    const response = await fetch(`${getApiBaseUrl()}/documents/${docId}/view`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to view document');
+    }
+    return response;
+}
+
+async function downloadDocumentApi(docId) {
+    const token = getToken();
+    const response = await fetch(`${getApiBaseUrl()}/documents/${docId}/download`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to download document');
+    }
+    return response;
+}
+
+window.getAllDocuments = getAllDocuments;
+window.viewDocumentApi = viewDocumentApi;
+window.downloadDocumentApi = downloadDocumentApi;
