@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +32,7 @@ public class EmailService {
         sendEmail(user.getEmail(), subject, body);
     }
 
+    @Async
     public void sendClaimApprovalEmail(User user, Claim claim) {
         String subject = "Claim Approved - " + appName;
         String body = buildEmailBody(
@@ -44,6 +46,7 @@ public class EmailService {
         sendEmail(user.getEmail(), subject, body);
     }
 
+    @Async
     public void sendClaimRejectionEmail(User user, Claim claim) {
         String subject = "Claim Rejected - " + appName;
         String body = buildEmailBody(
