@@ -1,7 +1,9 @@
 package com.insurai.backend.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -117,11 +120,10 @@ public class DocumentController {
             String storagePath = document.getStoragePath();
             System.out.println("[DEBUG] Document storagePath: " + storagePath);
 
+            // Proxy Cloudinary requests instead of redirecting to avoid CORS issues
             if (storagePath.startsWith("http")) {
-                System.out.println("[DEBUG] Cloudinary URL detected, redirecting");
-                return ResponseEntity.status(HttpStatus.FOUND)
-                        .location(URI.create(storagePath))
-                        .build();
+                System.out.println("[DEBUG] Cloudinary URL detected, proxying request");
+                return proxyCloudinaryDocument(storagePath, document, false);
             }
 
             Path filePath = Paths.get(storagePath);
@@ -150,6 +152,48 @@ public class DocumentController {
         }
     }
 
+    /**
+     * Proxy a document from Cloudinary to avoid CORS issues when embedding in iframes.
+     * This method fetches the document from Cloudinary server-side and streams it to the client.
+     */
+    private ResponseEntity<?> proxyCloudinaryDocument(String cloudinaryUrl, Document document, boolean download) {
+        try {
+            URL url = new URL(cloudinaryUrl);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(30000);
+            
+            int responseCode = connection.getResponseCode();
+            if (responseCode != java.net.HttpURLConnection.HTTP_OK) {
+                System.out.println("[DEBUG] Failed to fetch from Cloudinary: " + responseCode);
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Failed to fetch document from storage");
+            }
+            
+            String contentType = connection.getContentType();
+            if (contentType == null || contentType.isEmpty()) {
+                contentType = document.getContentType();
+            }
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+            
+            InputStream inputStream = connection.getInputStream();
+            InputStreamResource resource = new InputStreamResource(inputStream);
+            
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, download ? 
+                            "attachment; filename=\"" + document.getFileName() + "\"" : 
+                            "inline; filename=\"" + document.getFileName() + "\"")
+                    .header(HttpHeaders.CACHE_CONTROL, "public, max-age=31536000")
+                    .body(resource);
+        } catch (IOException e) {
+            System.out.println("[DEBUG] Error proxying Cloudinary document: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Failed to fetch document: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}/download")
     public ResponseEntity<?> downloadDocument(@PathVariable Long id) {
         System.out.println("[DEBUG] downloadDocument called with id: " + id);
@@ -164,12 +208,10 @@ public class DocumentController {
             Document document = docOpt.get();
             String storagePath = document.getStoragePath();
             
+            // Proxy Cloudinary requests instead of redirecting to avoid CORS issues
             if (storagePath.startsWith("http")) {
-                System.out.println("[DEBUG] Cloudinary URL detected, redirecting");
-                return ResponseEntity.status(HttpStatus.FOUND)
-                        .location(URI.create(storagePath))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"")
-                        .build();
+                System.out.println("[DEBUG] Cloudinary URL detected, proxying request");
+                return proxyCloudinaryDocument(storagePath, document, true);
             }
 
             Path filePath = Paths.get(storagePath);
