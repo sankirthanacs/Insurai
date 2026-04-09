@@ -6909,7 +6909,7 @@
             }
         }
 
-        // NEW: Load AI Insights from Agent Dashboard
+        // NEW: Load AI Insights from API
         async function loadAgentAiInsights() {
             const container = document.getElementById('aiInsights');
             const refreshBtn = document.querySelector('#aiInsights').parentElement.querySelector('.filter-btn');
@@ -6920,11 +6920,21 @@
             }
 
             try {
-                // Use local fraud detection data instead of API
-                const fraudAlerts = window.underwriterFraudAlerts || [];
-                const claims = window.underwriterClaimsCache || [];
-                
-                if (!Array.isArray(claims) || claims.length === 0) {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${window.API_BASE_URL}/api/ai/insights`, {
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : ''
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load AI insights');
+                }
+
+                const aiInsights = await response.json();
+                window.underwriterAiInsights = aiInsights;
+
+                if (!Array.isArray(aiInsights) || aiInsights.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6939,65 +6949,6 @@
                         refreshBtn.disabled = false;
                     }
                     return;
-                }
-
-                // Generate AI insights based on fraud detection and claims data
-                const highRiskClaims = claims.filter(c => calculateRiskScore(c) >= 70);
-                const fraudClaims = claims.filter(c => c.fraudDetected);
-                const pendingClaims = claims.filter(c => (c.status || '').toUpperCase() === 'PENDING');
-                
-                aiInsights = [];
-                window.underwriterAiInsights = aiInsights;
-                
-                // Fraud alerts insight
-                if (fraudAlerts.length > 0) {
-                    const highRiskAlerts = fraudAlerts.filter(a => a.riskScore === 'HIGH');
-                    const mediumRiskAlerts = fraudAlerts.filter(a => a.riskScore === 'MEDIUM');
-                    
-                    aiInsights.push({
-                        id: 'fraud-alert',
-                        type: 'urgent',
-                        title: 'Fraud Activity Detected',
-                        message: `${fraudAlerts.length} fraud alert(s) detected: ${highRiskAlerts.length} high risk, ${mediumRiskAlerts.length} medium risk. Immediate review recommended.`,
-                        timestamp: new Date().toLocaleString(),
-                        priority: 'high'
-                    });
-                }
-                
-                // High-risk claims insight
-                if (highRiskClaims.length > 0) {
-                    aiInsights.push({
-                        id: 'high-risk-trend',
-                        type: 'warning',
-                        title: 'High-Risk Claim Pattern Detected',
-                        message: `${highRiskClaims.length} high-risk claims identified. Consider enhanced review process.`,
-                        timestamp: new Date().toLocaleString(),
-                        priority: 'medium'
-                    });
-                }
-                
-                // Pending claims insight
-                if (pendingClaims.length > 5) {
-                    aiInsights.push({
-                        id: 'pending-backlog',
-                        type: 'warning',
-                        title: 'Claims Backlog Detected',
-                        message: `${pendingClaims.length} claims pending review. Consider prioritizing high-risk cases.`,
-                        timestamp: new Date().toLocaleString(),
-                        priority: 'medium'
-                    });
-                }
-                
-                // No issues insight
-                if (aiInsights.length === 0) {
-                    aiInsights.push({
-                        id: 'no-issues',
-                        type: 'info',
-                        title: 'No Critical Issues Detected',
-                        message: 'Current claims show normal risk patterns. Continue monitoring.',
-                        timestamp: new Date().toLocaleString(),
-                        priority: 'low'
-                    });
                 }
 
                 // Render AI insights
@@ -7016,7 +6967,7 @@
                         </div>
                         <p style="margin:0 0 8px 0;">${insight.message}</p>
                         <div class="alert-meta">
-                            <span style="font-size:11px;color:var(--text-secondary);">${insight.timestamp}</span>
+                            <span style="font-size:11px;color:var(--text-secondary);">${insight.timestamp || new Date().toLocaleString()}</span>
                             <div style="display:flex;gap:8px;">
                                 <button class="action-btn" onclick="viewAiInsightDetails('${insight.id}')">Details</button>
                                 <button class="action-btn" onclick="acknowledgeAiInsight('${insight.id}')">Acknowledge</button>

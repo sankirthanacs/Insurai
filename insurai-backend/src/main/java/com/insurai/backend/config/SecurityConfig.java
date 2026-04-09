@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/underwriter/**").hasRole("UNDERWRITER")
                 .requestMatchers("/api/claims/**").authenticated()
                 .requestMatchers("/api/support/**").permitAll()
-                .requestMatchers("/api/policies/**", "/api/admin/fraud", "/api/ai/fraud-alerts", "/api/agent/fraud-trends").permitAll()
+                .requestMatchers("/api/policies/**", "/api/admin/fraud", "/api/ai/fraud-alerts", "/api/ai/insights", "/api/agent/fraud-trends").permitAll()
                 .requestMatchers("/api/documents/**").permitAll()
                 .anyRequest().authenticated()
             )
