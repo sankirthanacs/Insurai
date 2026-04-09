@@ -1872,6 +1872,126 @@ function closeAddPolicyModal() {
   }
 }
 
+// View Claim Details function
+function viewClaimDetails(claimId) {
+  // Extract numeric ID if it has CLM- prefix
+  const numericId = claimId.replace('CLM-', '');
+  const id = parseInt(numericId, 10);
+  
+  // Search by numeric id or string id
+  const claim = dashboardState.claims.find(c => c.id === id || c.id === claimId || c.claimNumber === claimId);
+  
+  if (!claim) {
+    console.error('Claim not found:', claimId, 'Searched for ID:', id, 'Available claims:', dashboardState.claims);
+    showNotification('Claim not found', 'error');
+    return;
+  }
+  
+  // Create modal for claim details
+  const modal = document.createElement('div');
+  modal.className = 'modal active';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Claim Details</h3>
+        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="claim-details">
+          <div class="detail-row">
+            <span class="detail-label">Claim Number:</span>
+            <span class="detail-value">${claim.claimNumber || claim.id || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Policy Number:</span>
+            <span class="detail-value">${claim.policyNumber || claim.policy?.policyNumber || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Claim Type:</span>
+            <span class="detail-value">${claim.claimType || claim.type || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Claim Amount:</span>
+            <span class="detail-value">${(claim.claimAmount || claim.amount || 0).toLocaleString()}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value status-${(claim.status || 'pending').toLowerCase()}">${claim.status || 'Pending'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Incident Date:</span>
+            <span class="detail-value">${(claim.incidentDate || claim.createdDate || claim.submittedDate) ? new Date(claim.incidentDate || claim.createdDate || claim.submittedDate).toLocaleDateString() : 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Description:</span>
+            <span class="detail-value">${claim.description || 'N/A'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+// View Policy Details function
+function viewPolicyDetails(policyId) {
+  // Search by policyNumber first, then by id
+  const policy = dashboardState.policies.find(p => 
+    p.policyNumber === policyId || p.id === policyId || `POL-${p.id}` === policyId
+  );
+  
+  if (!policy) {
+    console.error('Policy not found:', policyId, 'Available policies:', dashboardState.policies);
+    showNotification('Policy not found', 'error');
+    return;
+  }
+  
+  // Create modal for policy details
+  const modal = document.createElement('div');
+  modal.className = 'modal active';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Policy Details</h3>
+        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="policy-details">
+          <div class="detail-row">
+            <span class="detail-label">Policy Number:</span>
+            <span class="detail-value">${policy.policyNumber || policy.id || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Policy Type:</span>
+            <span class="detail-value">${policy.policyType || policy.type || 'Insurance Policy'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Coverage Amount:</span>
+            <span class="detail-value">₹${(policy.coverageAmount || policy.coverage || 0).toLocaleString()}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Premium:</span>
+            <span class="detail-value">₹${(policy.premium || 0).toLocaleString()}/year</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Start Date:</span>
+            <span class="detail-value">${policy.startDate ? new Date(policy.startDate).toLocaleDateString() : 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">End Date:</span>
+            <span class="detail-value">${policy.endDate ? new Date(policy.endDate).toLocaleDateString() : 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value status-${(policy.status || 'active').toLowerCase()}">${policy.status || 'Active'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
 // Export functions for global access
 window.navigateTo = navigateTo;
 window.toggleSidebar = toggleSidebar;
