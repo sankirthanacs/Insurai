@@ -50,17 +50,13 @@ public class DocumentService {
 
     @PostConstruct
     public void init() {
-        if (cloudinary != null) {
-            useCloudinary = true;
-            System.out.println("[DocumentService] Cloudinary is configured and enabled");
-        } else {
-            useCloudinary = false;
-            System.out.println("[DocumentService] Cloudinary not configured, using local storage");
-            try {
-                Files.createDirectories(Paths.get(uploadDir));
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize upload directory", e);
-            }
+        // Force local storage for reliability (Cloudinary credentials may not be configured)
+        useCloudinary = false;
+        System.out.println("[DocumentService] Using local storage (Cloudinary disabled for reliability)");
+        try {
+            Files.createDirectories(Paths.get(uploadDir));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize upload directory", e);
         }
     }
 

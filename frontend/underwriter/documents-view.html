@@ -505,7 +505,13 @@
                 }
             } catch (error) {
                 console.error('Error viewing document:', error);
-                alert('Failed to view document: ' + error.message);
+                let message = 'Failed to view document';
+                if (error.message && error.message.includes('CLOUDINARY_NOT_CONFIGURED')) {
+                    message = 'Document is stored in cloud storage but credentials are not configured. Please contact administrator or re-upload the document.';
+                } else if (error.message) {
+                    message = 'Failed to view document: ' + error.message;
+                }
+                alert(message);
             }
         }
         

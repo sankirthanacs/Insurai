@@ -191,11 +191,18 @@ public class DocumentController {
      * Proxy a document from Cloudinary to avoid CORS issues when embedding in iframes.
      * This method fetches the document from Cloudinary server-side and streams it to the client.
      * Uses Cloudinary SDK for proper authentication with private resources.
+     * Falls back to local storage if Cloudinary is not configured.
      */
     private ResponseEntity<?> proxyCloudinaryDocument(String cloudinaryUrl, Document document, boolean download) {
         System.out.println("[DEBUG] Proxying Cloudinary URL: " + cloudinaryUrl);
         System.out.println("[DEBUG] Document filename: " + document.getFileName());
         System.out.println("[DEBUG] Document contentType: " + document.getContentType());
+        
+        // If Cloudinary is not configured, try local fallback
+        if (cloudinary == null) {
+            System.out.println("[DEBUG] Cloudinary not configured, trying local file fallback");
+            return serveLocalFallback(document, download);
+        }
         
         java.io.ByteArrayOutputStream buffer = null;
         try {
@@ -296,7 +303,7 @@ public class DocumentController {
                 }
                 
                 return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                        .body("Failed to fetch document from storage (HTTP " + responseCode + "). Please ensure Cloudinary credentials are configured.");
+                        .body("{\"error\":\"Document is stored in cloud storage but credentials are not configured. Please contact administrator to configure Cloudinary or re-upload the document.\",\"code\":\"CLOUDINARY_NOT_CONFIGURED\"}");
             }
             
             String contentType = connection.getContentType();
@@ -379,6 +386,73 @@ public class DocumentController {
         } catch (Exception e) {
             System.out.println("[DEBUG] Error extracting public ID: " + e.getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Try to serve document from local storage when Cloudinary is not configured.
+     */
+    private ResponseEntity<?> serveLocalFallback(Document document, boolean download) {
+        try {
+            String fileName = document.getFileName();
+            if (fileName == null || fileName.isEmpty()) {
+                fileName = "document_" + document.getId();
+            }
+            
+            // Try to find local file - check common upload directories
+            String[] possiblePaths = {
+                "uploads/" + fileName,
+                "uploads/" + document.getId() + "_" + fileName,
+                "C:/uploads/" + fileName,
+                System.getProperty("user.dir") + "/uploads/" + fileName
+            };
+            
+            Path filePath = null;
+            for (String path : possiblePaths) {
+                Path p = Paths.get(path);
+                if (Files.exists(p)) {
+                    filePath = p;
+                    break;
+                }
+            }
+            
+            if (filePath == null) {
+                // Try to find by ID in uploads folder
+                Path uploadsDir = Paths.get("uploads");
+                if (Files.exists(uploadsDir)) {
+                    var files = Files.list(uploadsDir).filter(Files::isRegularFile).toList();
+                    for (var f : files) {
+                        String fn = f.getFileName().toString();
+                        if (fn.contains(document.getId().toString())) {
+                            filePath = f;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (filePath != null && Files.exists(filePath)) {
+                System.out.println("[DEBUG] Found local file: " + filePath);
+                Resource resource = new FileSystemResource(filePath);
+                String contentType = document.getContentType();
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, download ?
+                                "attachment; filename=\"" + document.getFileName() + "\"" :
+                                "inline; filename=\"" + document.getFileName() + "\"")
+                        .body(resource);
+            }
+            
+            System.out.println("[DEBUG] No local fallback file found for document: " + document.getId());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Document not found. Storage path: " + document.getStoragePath());
+        } catch (Exception e) {
+            System.out.println("[DEBUG] Error in local fallback: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error accessing document: " + e.getMessage());
         }
     }
 
