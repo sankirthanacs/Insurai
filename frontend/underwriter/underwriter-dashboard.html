@@ -5269,7 +5269,10 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE}/api/claims/underwriter`);
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE}/api/claims/underwriter`, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 console.log('[Claims] Response status:', response.status);
                 
                 if (!response.ok) {
