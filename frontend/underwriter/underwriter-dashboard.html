@@ -4122,7 +4122,10 @@
             const startTime = Date.now();
             try {
                 console.log('[Policy Review] Fetching from:', `${API_BASE}/api/policies/review`);
-                const response = await fetch(`${API_BASE}/api/policies/review`);
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE}/api/policies/review`, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 console.log('[Policy Review] Response status:', response.status);
                 console.log('[Policy Review] Response headers:', response.headers);
                 
@@ -4198,9 +4201,13 @@
             console.log('[Policy Review] Approving policy:', policyId);
             if (!confirm('Are you sure you want to approve this policy?')) return;
             try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
                 const response = await fetch(`${API_BASE}/api/policies/${policyId}/approve`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    }
                 });
                 if (response.ok) {
                     if (typeof showToast === 'function') showToast(`Policy ${policyId} approved successfully`, 'success');
@@ -4224,9 +4231,13 @@
             console.log('[Policy Review] Rejecting policy:', policyId);
             if (!confirm('Are you sure you want to reject this policy?')) return;
             try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
                 const response = await fetch(`${API_BASE}/api/policies/${policyId}/reject`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    }
                 });
                 if (response.ok) {
                     if (typeof showToast === 'function') showToast(`Policy ${policyId} rejected`, 'success');
@@ -4766,7 +4777,10 @@
         // API Integration (Mock)
         async function fetchData(endpoint) {
             try {
-                const response = await fetch(`${API_BASE}${endpoint}`);
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 if (!response.ok) {
                     console.error(`API error! status: ${response.status} for endpoint: ${endpoint}`);
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -4789,7 +4803,10 @@
         // Fetch notifications dynamically
         async function fetchNotifications() {
             try {
-                const response = await fetch(`${API_BASE}/api/underwriter/notifications`);
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE}/api/underwriter/notifications`, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -6968,7 +6985,7 @@
             }
 
             try {
-                const token = localStorage.getItem('authToken');
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
                 const response = await fetch(`${window.API_BASE_URL}/ai/insights`, {
                     headers: {
                         'Authorization': token ? `Bearer ${token}` : ''
