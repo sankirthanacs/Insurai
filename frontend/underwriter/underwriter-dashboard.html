@@ -3670,13 +3670,13 @@
                 return Math.max(0, Math.min(100, claim.riskScore));
             }
 
-            let score = 20;
+            let score = 30; // Base score
             const amount = Number(claim.amount || 0);
-            if (amount > 0) score += Math.min(40, Math.round(amount / 2500));
-            if (claim.fraudDetected) score += 30;
-            if ((claim.status || '').toUpperCase() === 'APPROVED') score += 5;
-            if ((claim.status || '').toUpperCase() === 'REJECTED') score = Math.max(0, score - 10);
-            if ((claim.status || '').toUpperCase() === 'PENDING') score += 0;
+            if (amount > 0) score += Math.min(40, Math.round(amount / 2000));
+            if (claim.fraudDetected === true || claim.fraudDetected === 'true') score += 30;
+            if ((claim.status || '').toUpperCase() === 'PENDING') score += 10; // Pending adds risk
+            if ((claim.status || '').toUpperCase() === 'APPROVED') score -= 10; // Approved reduces risk
+            if ((claim.status || '').toUpperCase() === 'REJECTED') score += 5; // Rejected still has risk
 
             return Math.max(0, Math.min(100, score));
         }
@@ -5367,17 +5367,61 @@
             const policyRiskDistribution = document.getElementById('policyRiskDistribution');
             const departmentRiskChart = document.getElementById('departmentRiskChart');
             const approvalRatesChart = document.getElementById('approvalRatesChart');
+            const riskAnalyticsKpisEl = document.getElementById('riskAnalyticsKpis');
             
             if (!Array.isArray(claims)) return;
 
-            // Summaries
+            // Summaries - compute risk level from score if not already set
             const total = claims.length;
-            const highRisk = claims.filter(c => (c.riskLevel || '').toUpperCase() === 'HIGH').length;
-            const medRisk = claims.filter(c => (c.riskLevel || '').toUpperCase() === 'MEDIUM').length;
-            const lowRisk = claims.filter(c => (c.riskLevel || '').toUpperCase() === 'LOW').length;
+            const highRisk = claims.filter(c => {
+                const level = c.riskLevel || riskLevelFromScore(c.riskScore || calculateRiskScore(c));
+                return level.toUpperCase() === 'HIGH';
+            }).length;
+            const medRisk = claims.filter(c => {
+                const level = c.riskLevel || riskLevelFromScore(c.riskScore || calculateRiskScore(c));
+                return level.toUpperCase() === 'MEDIUM';
+            }).length;
+            const lowRisk = claims.filter(c => {
+                const level = c.riskLevel || riskLevelFromScore(c.riskScore || calculateRiskScore(c));
+                return level.toUpperCase() === 'LOW';
+            }).length;
             const approved = claims.filter(c => (c.status || '').toUpperCase() === 'APPROVED').length;
             const rejected = claims.filter(c => (c.status || '').toUpperCase() === 'REJECTED').length;
             const pending = claims.filter(c => (c.status || '').toUpperCase() === 'PENDING').length;
+
+            // Update Risk Analytics KPIs
+            if (riskAnalyticsKpisEl) {
+                riskAnalyticsKpisEl.innerHTML = `
+                    <div class="card kpi-card" style="flex:1; min-width:200px;">
+                        <div class="kpi-info">
+                            <h3 style="color:var(--danger);">${highRisk}</h3>
+                            <p>High Risk Claims</p>
+                        </div>
+                        <div class="kpi-icon" style="background:rgba(239,68,68,0.1);">🚨</div>
+                    </div>
+                    <div class="card kpi-card" style="flex:1; min-width:200px;">
+                        <div class="kpi-info">
+                            <h3 style="color:var(--warning);">${medRisk}</h3>
+                            <p>Medium Risk Claims</p>
+                        </div>
+                        <div class="kpi-icon" style="background:rgba(245,158,11,0.1);">⚠️</div>
+                    </div>
+                    <div class="card kpi-card" style="flex:1; min-width:200px;">
+                        <div class="kpi-info">
+                            <h3 style="color:var(--success);">${lowRisk}</h3>
+                            <p>Low Risk Claims</p>
+                        </div>
+                        <div class="kpi-icon" style="background:rgba(16,185,129,0.1);">✓</div>
+                    </div>
+                    <div class="card kpi-card" style="flex:1; min-width:200px;">
+                        <div class="kpi-info">
+                            <h3>${total}</h3>
+                            <p>Total Claims</p>
+                        </div>
+                        <div class="kpi-icon" style="background:rgba(37,99,235,0.1);">📊</div>
+                    </div>
+                `;
+            }
 
             // Update Risk Distribution Chart (interactive Chart.js doughnut)
             if (riskDistributionEl) {
@@ -5791,7 +5835,8 @@
                 const count = claims.filter(c => {
                     const claimDate = new Date(c.createdDate || c.date || Date.now());
                     const claimDay = claimDate.toISOString().split('T')[0];
-                    const isHighRisk = (c.riskLevel || '').toUpperCase() === 'HIGH';
+                    const level = c.riskLevel || riskLevelFromScore(c.riskScore || calculateRiskScore(c));
+                    const isHighRisk = level.toUpperCase() === 'HIGH';
                     return claimDay === dayStr && isHighRisk;
                 }).length;
                 return { date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), count };
