@@ -13,9 +13,29 @@ const dashboardState = {
   notifications: [],
   documents: [],
   backendConnected: false,
-  userRole: 'user',
   currentLanguage: localStorage.getItem('insuraiLanguage') || 'en'
 };
+
+// API Configuration
+window.API_HOST = window.__API_URL__ || 'https://insurai-lhup.onrender.com';
+window.API_BASE_URL = window.API_BASE_URL || `${window.API_HOST}/api`;
+
+const API_CONFIG = {
+  baseUrl: window.API_BASE_URL || `${window.API_HOST}/api`,
+  endpoints: {
+    userProfile: '/user/profile',
+    userPolicies: '/policies/my-policies',
+    userClaims: '/claims/user',
+    userNotifications: '/notifications/user',
+    submitClaim: '/claims/submit',
+    uploadDocument: '/documents/upload',
+    createTicket: '/support/tickets',
+    updateProfile: '/user/profile'
+  }
+};
+
+// Make API_CONFIG available globally
+window.API_CONFIG = API_CONFIG;
 
 // Language Translations
 const translations = {
@@ -437,7 +457,7 @@ function changeLanguage(lang) {
   console.log(`Language changed to: ${lang}`);
 }
 
-// Initialize language on load
+// Initialize language on load and set up event listeners
 document.addEventListener('DOMContentLoaded', function() {
   const savedLang = localStorage.getItem('insuraiLanguage') || 'en';
   const langSelect = document.getElementById('language-select');
@@ -447,6 +467,15 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => changeLanguage(savedLang), 100);
     }
   }
+  
+  // Set up claim form submission
+  const claimForm = document.getElementById('claim-form');
+  if (claimForm) {
+    claimForm.addEventListener('submit', handleClaimSubmit);
+  }
+  
+  // Connect to backend on load
+  connectToBackend();
 });
 
 // Navigate to page function
