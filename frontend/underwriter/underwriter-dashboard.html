@@ -6966,7 +6966,7 @@
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch(`${window.API_BASE_URL}/api/ai/insights`, {
+                const response = await fetch(`${window.API_BASE_URL}/ai/insights`, {
                     headers: {
                         'Authorization': token ? `Bearer ${token}` : ''
                     }
