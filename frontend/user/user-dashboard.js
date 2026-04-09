@@ -1481,6 +1481,397 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+// Missing Functions Implementation
+
+// Update Claims Table function
+function updateClaimsTable(claims) {
+  const claimsTableBody = document.getElementById('claims-table-body');
+  if (!claimsTableBody) return;
+  
+  claimsTableBody.innerHTML = '';
+  
+  if (claims.length === 0) {
+    claimsTableBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="no-data">No claims found</td>
+      </tr>
+    `;
+    return;
+  }
+  
+  claims.forEach(claim => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${claim.claimNumber || claim.id || 'N/A'}</td>
+      <td>${claim.claimType || claim.type || 'N/A'}</td>
+      <td>₹${(claim.claimAmount || claim.amount || 0).toLocaleString()}</td>
+      <td>${claim.incidentDate ? new Date(claim.incidentDate).toLocaleDateString() : 'N/A'}</td>
+      <td><span class="status-badge status-${(claim.status || 'pending').toLowerCase()}">${claim.status || 'Pending'}</span></td>
+      <td><span class="risk-badge risk-low">${claim.riskScore || 'Low'}</span></td>
+      <td>
+        <div class="action-buttons">
+          <button class="btn btn-sm btn-primary" onclick="viewClaimDetails('${claim.id || claim.claimNumber}')">View</button>
+        </div>
+      </td>
+    `;
+    claimsTableBody.appendChild(row);
+  });
+}
+
+// Update Policies Table function
+function updatePoliciesTable(policies) {
+  const policiesGrid = document.getElementById('policies-grid');
+  if (!policiesGrid) return;
+  
+  policiesGrid.innerHTML = '';
+  
+  if (!policies || policies.length === 0) {
+    policiesGrid.innerHTML = `
+      <div class="no-data">
+        <i class="fas fa-file-alt"></i>
+        <h4>No policies found</h4>
+        <p>You don't have any active policies yet. Add your first policy to get started.</p>
+        <button class="btn btn-primary" onclick="showAddPolicyModal()">Add Your First Policy</button>
+      </div>
+    `;
+    return;
+  }
+  
+  policiesGrid.innerHTML = policies.map(policy => {
+    const policyId = policy.policyNumber || `POL-${policy.id}`;
+    const policyType = policy.policyType || policy.type || 'Insurance Policy';
+    const coverage = policy.coverageAmount || policy.coverage || 0;
+    const premium = policy.premium || 0;
+    const startDate = policy.startDate ? new Date(policy.startDate).toLocaleDateString() : 'N/A';
+    const endDate = policy.endDate ? new Date(policy.endDate).toLocaleDateString() : 'N/A';
+    const status = policy.status || 'ACTIVE';
+    const statusClass = status.toLowerCase();
+    
+    return `
+      <div class="policy-card" onclick="viewPolicyDetails('${policyId}')">
+        <div class="policy-card-header">
+          <div class="policy-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <span class="policy-status status-${statusClass}">${status}</span>
+        </div>
+        <div class="policy-card-body">
+          <h4 class="policy-type">${policyType}</h4>
+          <p class="policy-number">${policyId}</p>
+          <div class="policy-details-grid">
+            <div class="policy-detail">
+              <span class="detail-label">Coverage</span>
+              <span class="detail-value">₹${coverage.toLocaleString()}</span>
+            </div>
+            <div class="policy-detail">
+              <span class="detail-label">Premium</span>
+              <span class="detail-value">₹${premium.toLocaleString()}/yr</span>
+            </div>
+          </div>
+          <div class="policy-dates">
+            <div class="date-item">
+              <i class="fas fa-calendar-check"></i>
+              <span>Start: ${startDate}</span>
+            </div>
+            <div class="date-item">
+              <i class="fas fa-calendar-times"></i>
+              <span>End: ${endDate}</span>
+            </div>
+          </div>
+        </div>
+        <div class="policy-card-footer">
+          <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); viewPolicyDetails('${policyId}')">
+            <i class="fas fa-eye"></i> View Details
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Update Notification Badge function
+function updateNotificationBadge(count) {
+  const badge = document.getElementById('notification-badge');
+  if (!badge) return;
+  badge.textContent = count > 0 ? count : '0';
+  badge.style.display = count > 0 ? 'inline-flex' : 'none';
+}
+
+// Format Time Ago function
+function formatTimeAgo(timestamp) {
+  const now = new Date();
+  const past = new Date(timestamp);
+  const diffInSeconds = Math.floor((now - past) / 1000);
+  
+  if (diffInSeconds < 60) {
+    return 'Just now';
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  }
+}
+
+// Filter and Search Policies function
+function filterAndSearchPolicies(searchTerm, filterValue) {
+  const policiesGrid = document.getElementById('policies-grid');
+  if (!policiesGrid) return;
+  
+  let filteredPolicies = dashboardState.policies;
+  
+  // Apply filter
+  if (filterValue !== 'all') {
+    filteredPolicies = filteredPolicies.filter(policy => {
+      const policyType = (policy.policyType || policy.type || '').toLowerCase();
+      const status = (policy.status || '').toLowerCase();
+      
+      switch (filterValue) {
+        case 'active':
+          return status === 'active';
+        case 'expired':
+          return status === 'expired' || status === 'inactive';
+        case 'pending':
+          return status === 'pending';
+        case 'health':
+          return policyType.includes('health') || policyType.includes('medical');
+        case 'life':
+          return policyType.includes('life');
+        case 'auto':
+          return policyType.includes('auto') || policyType.includes('vehicle');
+        case 'home':
+          return policyType.includes('home') || policyType.includes('property');
+        default:
+          return true;
+      }
+    });
+  }
+  
+  // Apply search
+  if (searchTerm.trim()) {
+    const searchLower = searchTerm.toLowerCase();
+    filteredPolicies = filteredPolicies.filter(policy => {
+      const policyNumber = (policy.policyNumber || '').toLowerCase();
+      const policyType = (policy.policyType || policy.type || '').toLowerCase();
+      const provider = (policy.provider || '').toLowerCase();
+      return policyNumber.includes(searchLower) || 
+             policyType.includes(searchLower) || 
+             provider.includes(searchLower);
+    });
+  }
+  
+  // Re-render filtered policies
+  updatePoliciesTable(filteredPolicies);
+}
+
+// Load Documents Data function
+async function loadDocumentsData() {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    const response = await fetch(`${API_CONFIG.baseUrl}/documents/user`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const documents = await response.json();
+      dashboardState.documents = documents || [];
+      updateDocumentsTable(documents);
+    }
+  } catch (error) {
+    console.error('Error loading documents:', error);
+  }
+}
+
+// Update Documents Table function
+function updateDocumentsTable(documents) {
+  const documentsGrid = document.getElementById('documents-grid');
+  if (documentsGrid) {
+    documentsGrid.innerHTML = '';
+    
+    if (!documents || documents.length === 0) {
+      documentsGrid.innerHTML = '<div class="no-data">No documents found</div>';
+      return;
+    }
+
+    documentsGrid.innerHTML = documents.map(doc => {
+      const docId = doc.id || 'N/A';
+      const docName = doc.fileName || doc.name || 'Document';
+      const docCategory = doc.category || doc.documentType || 'General';
+      const uploadDate = doc.uploadDate ? new Date(doc.uploadDate).toLocaleDateString() : 'N/A';
+      
+      return `
+        <div class="document-card">
+          <div class="document-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="document-info">
+            <h4>${docName}</h4>
+            <p>Category: ${docCategory}</p>
+            <p>Uploaded: ${uploadDate}</p>
+          </div>
+          <div class="document-actions">
+            <button class="btn-icon" onclick="viewDocumentDetails(${docId})"><i class="fas fa-eye"></i></button>
+            <button class="btn-icon" onclick="downloadDocument(${docId})"><i class="fas fa-download"></i></button>
+            <button class="btn-icon" onclick="deleteDocument(${docId})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// Load Support Tickets function
+async function loadSupportTickets() {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    const response = await fetch(`${API_CONFIG.baseUrl}/support/tickets`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const tickets = await response.json();
+      updateSupportTicketsTable(tickets);
+    }
+  } catch (error) {
+    console.error('Error loading support tickets:', error);
+  }
+}
+
+// Update Support Tickets Table function
+function updateSupportTicketsTable(tickets) {
+  const ticketsTableBody = document.getElementById('support-tickets-body');
+  if (!ticketsTableBody) return;
+  
+  ticketsTableBody.innerHTML = '';
+  
+  if (!tickets || tickets.length === 0) {
+    ticketsTableBody.innerHTML = `
+      <tr>
+        <td colspan="5" class="no-data">No support tickets found</td>
+      </tr>
+    `;
+    return;
+  }
+  
+  tickets.forEach(ticket => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${ticket.id || 'N/A'}</td>
+      <td>${ticket.subject || 'No subject'}</td>
+      <td>${ticket.category || 'General'}</td>
+      <td><span class="status-badge status-${(ticket.status || 'open').toLowerCase()}">${ticket.status || 'Open'}</span></td>
+      <td>${ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : 'N/A'}</td>
+    `;
+    ticketsTableBody.appendChild(row);
+  });
+}
+
+// Mark as Read function
+async function markAsRead(notificationId) {
+  if (!notificationId) return;
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      showNotification('Please log in to manage notifications', 'warning');
+      return;
+    }
+    const response = await fetch(`${API_CONFIG.baseUrl}/notifications/${notificationId}/read`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const updated = await response.json();
+      const index = dashboardState.notifications.findIndex(n => n.id === updated.id);
+      if (index !== -1) {
+        dashboardState.notifications[index] = updated;
+      }
+      updateNotificationBadge(dashboardState.notifications.filter(n => !n.read).length);
+      renderNotificationsPage();
+      updateDashboardActivitySections();
+    }
+  } catch (error) {
+    console.error('Error marking notification read:', error);
+    showNotification('Failed to mark notification as read.', 'error');
+  }
+}
+
+// View Document Details function
+function viewDocumentDetails(docId) {
+  const doc = dashboardState.documents.find(d => d.id === docId);
+  if (!doc) {
+    showNotification('Document not found', 'error');
+    return;
+  }
+  
+  const modal = document.createElement('div');
+  modal.className = 'modal active';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Document Details</h3>
+        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="document-details">
+          <div class="detail-row">
+            <span class="detail-label">Document Name:</span>
+            <span class="detail-value">${doc.fileName || doc.name || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Document Type:</span>
+            <span class="detail-value">${doc.documentType || doc.type || 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Upload Date:</span>
+            <span class="detail-value">${doc.uploadDate ? new Date(doc.uploadDate).toLocaleDateString() : 'N/A'}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value status-${(doc.status || 'uploaded').toLowerCase()}">${doc.status || 'Uploaded'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+// Show Add Policy Modal function
+function showAddPolicyModal() {
+  const modal = document.getElementById('add-policy-modal');
+  if (modal) {
+    modal.classList.add('active');
+  }
+}
+
+// Close Add Policy Modal function
+function closeAddPolicyModal() {
+  const modal = document.getElementById('add-policy-modal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
 // Export functions for global access
 window.navigateTo = navigateTo;
 window.toggleSidebar = toggleSidebar;
@@ -1501,133 +1892,6 @@ window.showFAQ = showFAQ;
 window.contactSupport = contactSupport;
 window.sendMessage = sendMessage;
 window.askQuestion = askQuestion;
-// View claim details function
-function viewClaimDetails(claimId) {
-  console.log('View claim:', claimId);
-  // Find claim and show modal
-  const claim = dashboardState.claims.find(c => c.id === claimId);
-  if (claim) {
-    document.getElementById('modal-claim-id').textContent = 'CLM-' + claimId;
-    document.getElementById('claim-timeline-modal').classList.add('active');
-  }
-}
-
-// View policy details function
-function viewPolicyDetails(policyId) {
-  console.log('View policy:', policyId);
-  const policy = dashboardState.policies.find(p => p.id === policyId);
-  if (policy) {
-    document.getElementById('modal-policy-title').textContent = policy.policyName || policy.name;
-    document.getElementById('policy-details-modal').classList.add('active');
-  }
-}
-
-// Download policy function
-function downloadPolicy(policyId) {
-  console.log('Download policy:', policyId);
-  showNotification('Downloading policy...', 'info');
-}
-
-// Renew policy function
-function renewPolicy(policyId) {
-  console.log('Renew policy:', policyId);
-  showNotification('Renewal feature coming soon!', 'info');
-}
-
-// Show upload modal function
-function showUploadModal() {
-  document.getElementById('upload-modal')?.classList.add('active');
-}
-
-// Close upload modal function
-function closeUploadModal() {
-  document.getElementById('upload-modal')?.classList.remove('active');
-}
-
-// Upload document function
-async function uploadDocument() {
-  showNotification('Uploading document...', 'info');
-}
-
-// Download document function
-function downloadDocument(docId) {
-  console.log('Download document:', docId);
-  showNotification('Downloading document...', 'info');
-}
-
-// Delete document function
-function deleteDocument(docId) {
-  console.log('Delete document:', docId);
-  if (confirm('Are you sure you want to delete this document?')) {
-    showNotification('Document deleted', 'success');
-  }
-}
-
-// Mark all as read function
-function markAllAsRead() {
-  dashboardState.notifications.forEach(n => n.read = true);
-  document.querySelectorAll('.notification-item').forEach(el => el.classList.remove('unread'));
-  showNotification('All notifications marked as read', 'success');
-}
-
-// Show create ticket modal function
-function showCreateTicketModal() {
-  document.getElementById('support-modal')?.classList.add('active');
-}
-
-// Close create ticket modal function
-function closeCreateTicketModal() {
-  document.getElementById('support-modal')?.classList.remove('active');
-}
-
-// Show FAQ function
-function showFAQ() {
-  showNotification('FAQ feature coming soon!', 'info');
-}
-
-// Contact support function
-function contactSupport() {
-  showCreateTicketModal();
-}
-
-// Send message function
-function sendMessage() {
-  const input = document.getElementById('chat-input');
-  if (input && input.value.trim()) {
-    showNotification('Message sent!', 'success');
-    input.value = '';
-  }
-}
-
-// Ask question function
-async function askQuestion(question) {
-  console.log('Ask question:', question);
-  return 'AI assistant response';
-}
-
-// Edit profile function
-function editProfile() {
-  showNotification('Opening profile editor...', 'info');
-}
-
 window.editProfile = editProfile;
 window.resetClaimForm = resetClaimForm;
-window.viewClaimDetails = viewClaimDetails;
-window.viewPolicyDetails = viewPolicyDetails;
-window.toggleSidebar = toggleSidebar;
-window.closeModal = closeModal;
-window.downloadPolicy = downloadPolicy;
-window.renewPolicy = renewPolicy;
-window.showUploadModal = showUploadModal;
-window.closeUploadModal = closeUploadModal;
-window.uploadDocument = uploadDocument;
-window.downloadDocument = downloadDocument;
-window.deleteDocument = deleteDocument;
-window.markAllAsRead = markAllAsRead;
-window.showCreateTicketModal = showCreateTicketModal;
-window.closeCreateTicketModal = closeCreateTicketModal;
-window.showFAQ = showFAQ;
-window.contactSupport = contactSupport;
-window.sendMessage = sendMessage;
-window.askQuestion = askQuestion;
 
