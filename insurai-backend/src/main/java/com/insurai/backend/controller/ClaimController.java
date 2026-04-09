@@ -3,6 +3,7 @@ package com.insurai.backend.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,6 +89,7 @@ public class ClaimController {
 
     // ✅ UNDERWRITER (paginated)
     @GetMapping("/underwriter")
+    @PreAuthorize("hasRole('UNDERWRITER')")
     public ResponseEntity<Page<Claim>> getUnderwriterClaims(Pageable pageable) {
         return ResponseEntity.ok(claimService.getAllClaims(pageable));
     }

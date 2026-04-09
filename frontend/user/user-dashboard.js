@@ -1,5 +1,6 @@
+
 /**
- * InsurAI User Dashboard - JavaScript
+ * InsurAI User Dashboard - JavaScrip
  * Handles navigation, interactions, and API integration
  * Connected to backend and other dashboards
  */
@@ -3402,7 +3403,7 @@ async function submitClaimToBackend(formData) {
   }
 
   try {
-    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (!token) {
       showNotification('Please log in to submit claims', 'warning');
       return false;
