@@ -434,32 +434,6 @@ body {
   color: var(--primary-600);
 }
 
-.language-selector {
-  display: flex;
-  align-items: center;
-}
-
-.language-selector select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--neutral-300);
-  border-radius: var(--radius-md);
-  background: var(--white);
-  color: var(--neutral-700);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-out-expo);
-}
-
-.language-selector select:hover {
-  border-color: var(--primary-500);
-}
-
-.language-selector select:focus {
-  outline: none;
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
-
 .notification-btn:active {
   transform: scale(1.05);
 }
@@ -637,6 +611,12 @@ body {
 .stat-icon.total-coverage {
   background: rgba(139, 92, 246, 0.1);
   color: #8b5cf6;
+}
+
+.action-btn span {
+  color: var(--neutral-800);
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 
 .stat-content h3 {

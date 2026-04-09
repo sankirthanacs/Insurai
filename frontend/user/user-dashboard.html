@@ -16,56 +16,56 @@
                 <div class="brand-icon">🛡️</div>
                 <span class="brand-text">InsurAI</span>
             </div>
-            <p class="sidebar-tagline" data-i18n="trustedPartner">Your trusted insurance partner</p>
+            <p class="sidebar-tagline">Your trusted insurance partner</p>
             
             <nav class="sidebar-nav">
                 <ul class="sidebar-menu">
                     <li>
-                        <a href="#dashboard" class="active" data-page="dashboard" onclick="navigateTo('dashboard'); return false;">
+                        <a href="#dashboard" class="active" data-page="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
-                            <span data-i18n="dashboard">Dashboard</span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#file-claim" data-page="file-claim" onclick="navigateTo('file-claim'); return false;">
+                        <a href="#file-claim" data-page="file-claim">
                             <i class="fas fa-plus-circle"></i>
-                            <span data-i18n="fileClaim">File Claim</span>
+                            <span>File Claim</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#my-claims" data-page="my-claims" onclick="navigateTo('my-claims'); return false;">
+                        <a href="#my-claims" data-page="my-claims">
                             <i class="fas fa-clipboard-list"></i>
-                            <span data-i18n="myClaims">My Claims</span>
+                            <span>My Claims</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#my-policies" data-page="my-policies" onclick="navigateTo('my-policies'); return false;">
+                        <a href="#my-policies" data-page="my-policies">
                             <i class="fas fa-file-alt"></i>
-                            <span data-i18n="myPolicies">My Policies</span>
+                            <span>My Policies</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#documents" data-page="documents" onclick="navigateTo('documents'); return false;">
+                        <a href="#documents" data-page="documents">
                             <i class="fas fa-folder-open"></i>
-                            <span data-i18n="documentsCenter">Documents Center</span>
+                            <span>Documents Center</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" data-page="notifications" onclick="navigateTo('notifications'); return false;">
+                        <a href="#notifications" data-page="notifications">
                             <i class="fas fa-bell"></i>
-                            <span data-i18n="notifications">Notifications</span>
+                            <span>Notifications</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#assistant" data-page="assistant" onclick="navigateTo('assistant'); return false;">
+                        <a href="#assistant" data-page="assistant">
                             <i class="fas fa-robot"></i>
-                            <span data-i18n="aiAssistant">AI Assistant</span>
+                            <span>AI Assistant</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#profile" data-page="profile" onclick="navigateTo('profile'); return false;">
+                        <a href="#profile" data-page="profile">
                             <i class="fas fa-user"></i>
-                            <span data-i18n="profile">Profile</span>
+                            <span>Profile</span>
                         </a>
                     </li>
                 </ul>
@@ -74,7 +74,7 @@
                 <div class="sidebar-section">
                     <div class="connection-status" id="connection-status">
                         <i class="fas fa-circle" id="connection-indicator"></i>
-                        <span id="connection-text" data-i18n="connecting">Connecting...</span>
+                        <span id="connection-text">Connecting...</span>
                     </div>
                 </div>
             </nav>
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="ai-header-btn" onclick="navigateTo('assistant'); return false;" title="Open AI Assistant">
+                    <button class="ai-header-btn" onclick="navigateTo('assistant')" title="Open AI Assistant">
                         <i class="fas fa-robot"></i>
                         AI Assistant
                     </button>
@@ -111,13 +111,6 @@
                         <button class="search-btn" onclick="triggerSearch()">
                             <i class="fas fa-arrow-right"></i>
                         </button>
-                    </div>
-                    <div class="language-selector">
-                        <select id="language-select" onchange="changeLanguage(this.value)" title="Select Language">
-                            <option value="en">English</option>
-                            <option value="hi">हिंदी</option>
-                            <option value="te">తెలుగు</option>
-                        </select>
                     </div>
                     <button class="notification-btn" id="notification-btn">
                         <i class="fas fa-bell"></i>
@@ -145,7 +138,7 @@
                             </div>
                             <div class="stat-content">
                                 <h3 id="pending-claims-count">3</h3>
-                                <p data-i18n="pendingClaims">Pending Claims</p>
+                                <p>Pending Claims</p>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -154,20 +147,26 @@
                             </div>
                             <div class="stat-content">
                                 <h3 id="approved-claims-count">12</h3>
-                                <p data-i18n="approvedClaims">Approved Claims</p>
+                                <p>Approved Claims</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Quick Actions -->
                     <div class="section">
-                        <h2 class="section-title" data-i18n="quickActions">Quick Actions</h2>
+                        <h2 class="section-title">Quick Actions</h2>
                         <div class="quick-actions">
-                        <button class="action-btn" onclick="navigateTo('file-claim'); return false;">
-                        <button class="action-btn" onclick="navigateTo('documents'); return false;">
-                        <button class="action-btn" onclick="navigateTo('my-policies'); return false;">
+                            <button class="action-btn" onclick="navigateTo('file-claim')">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>File New Claim</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('documents')">
+                                <i class="fas fa-upload"></i>
+                                <span>Upload Documents</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('my-policies')">
                                 <i class="fas fa-file-alt"></i>
-                                <span data-i18n="viewPolicies">View Policies</span>
+                                <span>View Policies</span>
                             </button>
 
                         </div>
@@ -176,14 +175,14 @@
                     <!-- Recent Activity & Notifications -->
                     <div class="dashboard-grid">
                         <div class="section">
-                            <h2 class="section-title" data-i18n="recentActivity">Recent Activity</h2>
+                            <h2 class="section-title">Recent Activity</h2>
                             <div class="activity-list" id="activity-list">
                                 <div class="activity-item" id="activity-list-placeholder">
                                     <div class="activity-icon">
                                         <i class="fas fa-info-circle"></i>
                                     </div>
                                     <div class="activity-content">
-                                        <p data-i18n="noRecentActivity">No recent activity</p>
+                                        <p>No recent activity</p>
                                         <span class="activity-time">-</span>
                                     </div>
                                 </div>
@@ -191,14 +190,14 @@
                         </div>
 
                         <div class="section">
-                            <h2 class="section-title" data-i18n="notifications">Notifications</h2>
+                            <h2 class="section-title">Notifications</h2>
                             <div class="notifications-list" id="notifications-list">
                                 <div class="notification-item" id="notifications-list-placeholder">
                                     <div class="notification-icon">
                                         <i class="fas fa-info-circle"></i>
                                     </div>
                                     <div class="notification-content">
-                                        <p data-i18n="noNotifications">No notifications</p>
+                                        <p>No notifications</p>
                                         <span class="notification-time">-</span>
                                     </div>
                                 </div>
@@ -208,7 +207,7 @@
 
                     <!-- Claim Progress Timeline -->
                     <div class="section">
-                        <h2 class="section-title" data-i18n="recentClaimProgress">Recent Claim Progress</h2>
+                        <h2 class="section-title">Recent Claim Progress</h2>
                         <div class="claim-timeline" id="claim-timeline">
                             <div class="timeline-item completed">
                                 <div class="timeline-marker"></div>
@@ -257,51 +256,52 @@
                 <!-- File Claim Page -->
                 <div class="page" id="file-claim-page">
                     <div class="section">
-                        <h2 class="section-title" data-i18n="fileClaim">File a New Claim</h2>
+                        <h2 class="section-title">File a New Claim</h2>
                         <form id="claim-form" class="claim-form">
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="claim-category" data-i18n="claimCategory">Claim Category *</label>
+                                    <label for="claim-category">Claim Category *</label>
                                     <select id="claim-category" required>
-                                        <option value="" data-i18n="selectCategory">Select category</option>
+                                        <option value="">Select category</option>
                                         <option value="medical">Medical</option>
                                         <option value="accident">Accident</option>
                                         <option value="property">Property</option>
-                                        <option value="life">Life</option>
-                                        <option value="travel">Travel</option>
+                                    <option value="property">Life</option>
+                                        <option value="property">Travel</option>
+
                                         <option value="theft">Theft</option>
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="claim-amount" data-i18n="claimAmountINR">Claim Amount (INR) *</label>
-                                    <input type="number" id="claim-amount" data-i18n-placeholder="enterAmount" placeholder="Enter amount" required min="0">
+                                    <label for="claim-amount">Claim Amount (INR) *</label>
+                                    <input type="number" id="claim-amount" placeholder="Enter amount" required min="0">
                                 </div>
                                 <div class="form-group">
-                                    <label for="incident-date" data-i18n="incidentDate">Incident Date *</label>
+                                    <label for="incident-date">Incident Date *</label>
                                     <input type="date" id="incident-date" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="hospital-provider" data-i18n="hospitalProvider">Hospital / Service Provider</label>
-                                    <input type="text" id="hospital-provider" data-i18n-placeholder="enterProvider" placeholder="Enter provider name">
+                                    <label for="hospital-provider">Hospital / Service Provider</label>
+                                    <input type="text" id="hospital-provider" placeholder="Enter provider name">
                                 </div>
                                 <div class="form-group full-width">
-                                    <label for="incident-description" data-i18n="incidentDescription">Incident Description *</label>
-                                    <textarea id="incident-description" rows="4" data-i18n-placeholder="incidentDetail" placeholder="Describe the incident in detail..." required></textarea>
+                                    <label for="incident-description">Incident Description *</label>
+                                    <textarea id="incident-description" rows="4" placeholder="Describe the incident in detail..." required></textarea>
                                 </div>
                                 <div class="form-group full-width">
-                                    <label for="claim-documents" data-i18n="uploadDocuments">Upload Documents</label>
+                                    <label for="claim-documents">Upload Documents</label>
                                     <div class="file-upload-area" id="file-upload-area">
                                         <i class="fas fa-cloud-upload-alt"></i>
-                                        <p data-i18n="dragDrop">Drag & drop files here or click to browse</p>
+                                        <p>Drag & drop files here or click to browse</p>
                                         <input type="file" id="claim-documents" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     </div>
                                     <div class="uploaded-files" id="uploaded-files"></div>
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="button" class="btn btn-secondary" onclick="resetClaimForm()" data-i18n="reset">Reset</button>
-                                <button type="submit" class="btn btn-primary" data-i18n="submitClaim">Submit Claim</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetClaimForm()">Reset</button>
+                                <button type="submit" class="btn btn-primary">Submit Claim</button>
                             </div>
                         </form>
                     </div>
@@ -311,13 +311,13 @@
                 <div class="page" id="my-claims-page">
                     <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title" data-i18n="myClaims">My Claims</h2>
+                            <h2 class="section-title">My Claims</h2>
                             <div class="filter-controls">
                                 <select id="claim-status-filter">
-                                    <option value="all" data-i18n="allStatus">All Status</option>
-                                    <option value="pending" data-i18n="pending">Pending</option>
-                                    <option value="approved" data-i18n="approved">Approved</option>
-                                    <option value="rejected" data-i18n="rejected">Rejected</option>
+                                    <option value="all">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
                                 </select>
                             </div>
                         </div>
@@ -325,18 +325,18 @@
                             <table class="claims-table">
                                 <thead>
                                     <tr>
-                                        <th data-i18n="claimID">Claim ID</th>
-                                        <th data-i18n="policy">Policy</th>
-                                        <th data-i18n="amount">Amount</th>
-                                        <th data-i18n="status">Status</th>
-                                        <th data-i18n="processingStage">Processing Stage</th>
-                                        <th data-i18n="fraudRisk">Fraud Risk</th>
-                                        <th data-i18n="actions">Actions</th>
+                                        <th>Claim ID</th>
+                                        <th>Policy</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Processing Stage</th>
+                                        <th>Fraud Risk</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="claims-table-body">
                                     <tr>
-                                        <td colspan="7" class="no-data" data-i18n="noClaimsFound">No claims found</td>
+                                        <td colspan="7" class="no-data">No claims found</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -403,26 +403,26 @@
                     <div class="section">
                         <div class="section-header">
                             <div class="section-title-container">
-                                <h2 class="section-title" data-i18n="myPolicies">My Policies</h2>
-                                <p class="section-subtitle" data-i18n="manageCoverage">Manage your insurance coverage and policy details</p>
+                                <h2 class="section-title">My Policies</h2>
+                                <p class="section-subtitle">Manage your insurance coverage and policy details</p>
                             </div>
                             <div class="policies-actions">
                                 <div class="search-box">
                                     <i class="fas fa-search"></i>
-                                    <input type="text" id="policy-search" data-i18n-placeholder="searchPolicies" placeholder="Search policies...">
+                                    <input type="text" id="policy-search" placeholder="Search policies...">
                                 </div>
                                 <select id="policy-filter" class="filter-select">
-                                    <option value="all" data-i18n="allPolicies">All Policies</option>
-                                    <option value="active" data-i18n="active">Active</option>
-                                    <option value="expired" data-i18n="expired">Expired</option>
-                                    <option value="pending" data-i18n="pending">Pending</option>
+                                    <option value="all">All Policies</option>
+                                    <option value="active">Active</option>
+                                    <option value="expired">Expired</option>
+                                    <option value="pending">Pending</option>
                                     <option value="health">Health</option>
                                     <option value="life">Life</option>
                                     <option value="auto">Auto</option>
                                     <option value="home">Home</option>
                                 </select>
                                 <button class="btn btn-primary" onclick="showAddPolicyModal()">
-                                    <i class="fas fa-plus"></i> <span data-i18n="addPolicy">Add Policy</span>
+                                    <i class="fas fa-plus"></i> Add Policy
                                 </button>
                             </div>
                         </div>
@@ -435,7 +435,7 @@
                                 </div>
                                 <div class="summary-content">
                                     <h3 id="total-policies-count">0</h3>
-                                    <p data-i18n="totalPolicies">Total Policies</p>
+                                    <p>Total Policies</p>
                                 </div>
                             </div>
                             <div class="summary-card">
@@ -444,7 +444,7 @@
                                 </div>
                                 <div class="summary-content">
                                     <h3 id="expiring-soon-count">0</h3>
-                                    <p data-i18n="expiringSoon">Expiring Soon</p>
+                                    <p>Expiring Soon</p>
                                 </div>
                             </div>
                         </div>
@@ -453,9 +453,9 @@
                         <div class="policies-grid" id="policies-grid">
                             <div class="no-data">
                                 <i class="fas fa-file-alt"></i>
-                                <h4 data-i18n="noPoliciesFound">No policies found</h4>
-                                <p data-i18n="noPoliciesDesc">You don't have any active policies yet. Add your first policy to get started.</p>
-                                <button class="btn btn-primary" onclick="showAddPolicyModal()" data-i18n="addFirstPolicy">Add Your First Policy</button>
+                                <h4>No policies found</h4>
+                                <p>You don't have any active policies yet. Add your first policy to get started.</p>
+                                <button class="btn btn-primary" onclick="showAddPolicyModal()">Add Your First Policy</button>
                             </div>
                         </div>
 
@@ -674,13 +674,13 @@
                 <div class="page" id="documents-page">
                     <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title" data-i18n="documentsCenter">Documents Center</h2>
+                            <h2 class="section-title">Documents Center</h2>
                             <button class="btn btn-primary" onclick="showUploadModal()">
-                                <i class="fas fa-upload"></i> <span data-i18n="uploadDocument">Upload Document</span>
+                                <i class="fas fa-upload"></i> Upload Document
                             </button>
                         </div>
                         <div class="documents-grid" id="documents-grid">
-                            <div class="no-data" data-i18n="noDocuments">No documents found</div>
+                            <div class="no-data">No documents found</div>
                         </div>
                     </div>
 
@@ -688,12 +688,12 @@
                     <div class="modal" id="upload-modal">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h3 data-i18n="uploadDocument">Upload Document</h3>
+                                <h3>Upload Document</h3>
                                 <button class="modal-close" onclick="closeUploadModal()">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="document-category" data-i18n="documentCategory">Document Category</label>
+                                    <label for="document-category">Document Category</label>
                                     <select id="document-category">
                                         <option value="policy">Policy Document</option>
                                         <option value="claim">Claim Document</option>
@@ -704,12 +704,12 @@
                                 </div>
                                 <div class="file-upload-area">
                                     <i class="fas fa-cloud-upload-alt"></i>
-                                    <p data-i18n="dragDrop">Drag & drop files here or click to browse</p>
+                                    <p>Drag & drop files here or click to browse</p>
                                     <input type="file" id="document-file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                 </div>
                                 <div class="form-actions">
-                                    <button class="btn btn-secondary" onclick="closeUploadModal()" data-i18n="cancel">Cancel</button>
-                                    <button class="btn btn-primary" onclick="uploadDocument()" data-i18n="upload">Upload</button>
+                                    <button class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+                                    <button class="btn btn-primary" onclick="uploadDocument()">Upload</button>
                                 </div>
                             </div>
                         </div>
@@ -720,23 +720,22 @@
                 <div class="page" id="notifications-page">
                     <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title" data-i18n="notifications">Notifications</h2>
-                            <button class="btn btn-secondary" onclick="markAllAsRead(); return false;">
-                                <i class="fas fa-check-double"></i> <span data-i18n="markAllRead">Mark All as Read</span>
+                            <h2 class="section-title">Notifications</h2>
+                            <button class="btn btn-secondary" onclick="markAllAsRead()">
+                                <i class="fas fa-check-double"></i> Mark All as Read
                             </button>
                         </div>
                         <div class="notifications-full-list" id="notifications-full-list">
-                            <div class="no-data" data-i18n="noNotifications">No notifications found</div>
+                            <div class="no-data">No notifications found</div>
                         </div>
                     </div>
                 </div>
 
 
-
                 <!-- AI Assistant Page -->
                 <div class="page" id="assistant-page">
                     <div class="section">
-                        <h2 class="section-title" data-i18n="aiAssistant">AI Assistant</h2>
+                        <h2 class="section-title">AI Assistant</h2>
                         <div class="chat-container">
                             <div class="chat-messages" id="chat-messages">
                                 <div class="message bot">
@@ -750,8 +749,8 @@
                                 </div>
                             </div>
                             <div class="chat-input-container">
-                                <input type="text" id="chat-input" data-i18n-placeholder="typeMessage" placeholder="Type your message..." class="chat-input">
-                                <button class="chat-send-btn" onclick="sendMessage(); return false;">
+                                <input type="text" id="chat-input" placeholder="Type your message..." class="chat-input">
+                                <button class="chat-send-btn" onclick="sendMessage()">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -767,7 +766,7 @@
                 <!-- Profile Page -->
                 <div class="page" id="profile-page">
                     <div class="section">
-                        <h2 class="section-title" data-i18n="myProfile">My Profile</h2>
+                        <h2 class="section-title">My Profile</h2>
                         <div class="profile-container">
                             <div class="profile-header">
                                 <div class="profile-avatar" id="profile-avatar">U</div>
@@ -776,39 +775,39 @@
                                     <p id="profile-email">john.doe@example.com</p>
                                     <p id="profile-phone">+1 (555) 123-4567</p>
                                 </div>
-                                <button class="btn btn-secondary" onclick="editProfile(); return false;">
-                                    <i class="fas fa-edit"></i> <span data-i18n="editProfile">Edit Profile</span>
+                                <button class="btn btn-secondary" onclick="editProfile()">
+                                    <i class="fas fa-edit"></i> Edit Profile
                                 </button>
                             </div>
                             <div class="profile-details">
                                 <div class="detail-section">
-                                    <h4 data-i18n="personalInfo">Personal Information</h4>
+                                    <h4>Personal Information</h4>
                                     <div class="detail-grid">
                                         <div class="detail-item">
-                                            <label data-i18n="fullName">Full Name</label>
+                                            <label>Full Name</label>
                                             <p id="detail-name">John Doe</p>
                                         </div>
                                         <div class="detail-item">
-                                            <label data-i18n="email">Email</label>
+                                            <label>Email</label>
                                             <p id="detail-email">john.doe@example.com</p>
                                         </div>
                                         <div class="detail-item">
-                                            <label data-i18n="phone">Phone</label>
+                                            <label>Phone</label>
                                             <p id="detail-phone">+1 (555) 123-4567</p>
                                         </div>
                                         <div class="detail-item">
-                                            <label data-i18n="address">Address</label>
+                                            <label>Address</label>
                                             <p id="detail-address">123 Main St, City, State 12345</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="detail-section">
-                                    <h4 data-i18n="accountSettings">Account Settings</h4>
+                                    <h4>Account Settings</h4>
                                     <div class="settings-list">
                                         <div class="setting-item">
                                             <div class="setting-info">
-                                                <h5 data-i18n="emailNotifications">Email Notifications</h5>
-                                                <p data-i18n="emailNotifDesc">Receive email updates about your claims and policies</p>
+                                                <h5>Email Notifications</h5>
+                                                <p>Receive email updates about your claims and policies</p>
                                             </div>
                                             <label class="toggle-switch">
                                                 <input type="checkbox" checked>
@@ -817,8 +816,8 @@
                                         </div>
                                         <div class="setting-item">
                                             <div class="setting-info">
-                                                <h5 data-i18n="smsNotifications">SMS Notifications</h5>
-                                                <p data-i18n="smsNotifDesc">Receive SMS alerts for important updates</p>
+                                                <h5>SMS Notifications</h5>
+                                                <p>Receive SMS alerts for important updates</p>
                                             </div>
                                             <label class="toggle-switch">
                                                 <input type="checkbox">
@@ -827,8 +826,8 @@
                                         </div>
                                         <div class="setting-item">
                                             <div class="setting-info">
-                                                <h5 data-i18n="twoFactorAuth">Two-Factor Authentication</h5>
-                                                <p data-i18n="twoFactorDesc">Add an extra layer of security to your account</p>
+                                                <h5>Two-Factor Authentication</h5>
+                                                <p>Add an extra layer of security to your account</p>
                                             </div>
                                             <label class="toggle-switch">
                                                 <input type="checkbox">
@@ -846,10 +845,11 @@
     </div>
 
     <!-- Floating AI assistant shortcut (always visible) -->
-    <div class="floating-ai-btn" onclick="navigateTo('assistant'); return false;" title="Open AI Assistant">
+    <div class="floating-ai-btn" onclick="navigateTo('assistant')" title="Open AI Assistant">
         <i class="fas fa-robot"></i>
     </div>
 
     <script src="user-dashboard.js"></script>
 </body>
 </html>
+
