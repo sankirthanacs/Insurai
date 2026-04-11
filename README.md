@@ -1,6 +1,7 @@
 🚀 InsurAI
 
 InsurAI is an AI-powered insurance management platform built using Spring Boot and a modern frontend. It streamlines policy management, claim processing, fraud detection, and provides an AI assistant for users.
+https://insurai-mglx.vercel.app
 
 🌟 Features
 
